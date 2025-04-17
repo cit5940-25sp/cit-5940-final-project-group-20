@@ -12,9 +12,24 @@ public class Movie {
     private String composer;
 
     // constructor can be added later
+    public Movie(String title, int releaseYear, List<String> actors, String director,
+                 String writer, String cinematographer, String composer, List<String> genres) {
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.actors = actors;
+        this.director = director;
+        this.writer = writer;
+        this.cinematographer = cinematographer;
+        this.composer = composer;
+        this.genres = genres;
+    }
 
     public String getTitle() {
         return title;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
     public List<String> getGenres() {

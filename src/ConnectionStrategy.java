@@ -1,5 +1,3 @@
-// We might need to expand on the methods here...
-
 public interface ConnectionStrategy {
 
     // Check if two movies are connected based on this strategy (like same director, etc.)

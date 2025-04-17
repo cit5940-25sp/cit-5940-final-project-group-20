@@ -1,39 +1,104 @@
 import java.util.*;
 
 public class GameState {
-    private List<Player> players;
-    private int currentPlayerIndex;
-    private Movie currentMovie;
-    private Set<Movie> playedMovies;
-    private int round;
-    private Map<String, Integer> connectionUsageCount;
-    private WinConditionStrategy winCondition;
-    private boolean isGameOver; // I added this to UML (wasnt originally in it)
+    private List<Player> players; // list of players in the game
+    private int currentPlayerIndex; // represents current player (0 for player1, 1 for player2)
+    private Movie currentMovie; // movie that the current player has to connect to
+    private Set<Movie> playedMovies; // set to track all played moview
+    private int round; // how many rounds have we gone (current round number)
+    private Map<String, Integer> connectionUsageCount; // connection usage count for each type (actor, director etc)
+    private WinConditionStrategy winConditionStrategy; // win condition strategy
+    private boolean isGameOver; // check if the game is over
 
-    // Get whoever's turn it is right now
+    // construct and initialize
+    public GameState() {
+        this.players = null; // only players are initialized once they type in names
+        this.currentPlayerIndex = 0; // player 1 starts
+        this.currentMovie = null;
+        this.playedMovies = new HashSet<>(); // can't play movies that's been already played
+        this.round = 1; // start from round 1
+        this.connectionUsageCount = new HashMap<>();
+        this.winConditionStrategy = null;
+        this.isGameOver = false;
+    }
+
+    public void initializeGame(List<Player> players, Movie startingMovie) {
+        this.players = players;
+        this.currentPlayerIndex = 0; // player1 starts
+        this.currentMovie = startingMovie;
+        this.playedMovies.clear(); // clear the list of playedMovies at the start
+        this.round = 1; // start from round 1
+        this.connectionUsageCount.clear(); // clear connection usage count
+        this.isGameOver = false; // initially gameOver is false
+    }
+
+    // get current player
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
 
-    // Switch to the next player (loop around if needed)
-    public void switchPlayer() {
-        // to be implemented
-    }
-
-    // What movie are we currently building off of?
+    // get current movie
     public Movie getCurrentMovie() {
         return currentMovie;
     }
 
-    // Check if the move is actually valid with the given connection
-    public boolean isValidMovie(Movie from, Movie to, ConnectionStrategy connection) {
-        // to be implemented
-        return false;
+    // Switch to the next player
+    public void switchPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // toggle using modulo
     }
 
-    // Update the game state when a new movie is successfully played
-    public void updateState(Movie nextMovie, String connection) {
-        // to be implemented
+    // check if the game is over
+    public void setGameOver(boolean gameOver) {
+        this.isGameOver = gameOver;
+    }
+
+    // get the round number
+    public int getRound() {
+        return round;
+    }
+
+
+    // increment the round number after each turn
+    public void incrementRound() {
+        this.round++;
+    }
+
+    // add movie to the list of played movies
+    public void addPlayedMovie(Movie movie) {
+        playedMovies.add(movie);
+    }
+
+    // get all played movies
+    public Set<Movie> getPlayedMovies() {
+        return playedMovies;
+    }
+
+    // update the game state with next movie and connection type used
+    public void updateState(Movie nextMovie, String connectionType) {
+        addPlayedMovie(currentMovie); // add current movie to played movies
+        currentMovie = nextMovie;
+        incrementRound();
+        incrementConnectionUsage(connectionType);
+    }
+
+    // How many times has this connection type been used?
+    public int getConnectionUsage(String connectionType) {
+        return connectionUsageCount.getOrDefault(connectionType, 0);
+    }
+
+    // Increment the usage count for a connection type
+    public void incrementConnectionUsage(String connectionType) {
+        connectionUsageCount.put(connectionType, connectionUsageCount.getOrDefault(connectionType, 0) + 1);
+    }
+
+    // check if a player has won based on the win condition
+    public boolean hasPlayerWon(Player player) {
+        return winConditionStrategy.isSatisfied(player); // check ifi player satisfies win condition
+    }
+
+    // Set the win condition strategy
+    public void setWinCondition(WinConditionStrategy winConditionStrategy) {
+        this.winConditionStrategy = winConditionStrategy;
     }
 
     // Is the game finished based on win condition or other rules?
@@ -41,26 +106,15 @@ public class GameState {
         return isGameOver;
     }
 
-    // How many rounds have passed so far?
-    public int getRound() {
-        return round;
-    }
-
-    // Which movies have already been used in the game?
-    public Set<Movie> getPlayedMovies() {
-        return playedMovies;
-    }
-
-    // How many times has this connection type been used?
-    public int getConnectionUsage(String type) {
-        if (connectionUsageCount.containsKey(type)) {
-            return connectionUsageCount.get(type);
+    // Get the winner of the game
+    public Player getWinner() {
+        // In a real implementation, we should check all players to see who satisfies the win condition
+        for (Player player : players) {
+            if (hasPlayerWon(player)) {
+                return player;
+            }
         }
-        return 0;
+        return null;  // No winner if game isn't over
     }
 
-    // Increase the counter for this type of connection
-    public void incrementConnectionUsage(String type) {
-        connectionUsageCount.put(type, getConnectionUsage(type) + 1);
-    }
 }
