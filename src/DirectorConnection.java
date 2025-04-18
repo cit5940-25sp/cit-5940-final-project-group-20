@@ -1,7 +1,7 @@
 public class DirectorConnection implements ConnectionStrategy {
     @Override
     public boolean areConnected(Movie a, Movie b) {
-        return a.getDirector().equals(b.getDirector());  // Check if directors are the same
+        return a.getDirector().equalsIgnoreCase(b.getDirector());  // Check if directors are the same
     }
 
     @Override

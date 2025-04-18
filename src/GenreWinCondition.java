@@ -1,3 +1,5 @@
+// DEFAULT WIN CONDITION
+
 public class GenreWinCondition implements WinConditionStrategy {
     private String genre;
     private int requiredCount;
@@ -23,6 +25,7 @@ public class GenreWinCondition implements WinConditionStrategy {
 
     @Override
     public String getConditionType() {
-        return "Genre: " + genre;
+        String pluralGrammar = (requiredCount > 1) ? "movies" : "movie"; 
+        return "Play " + requiredCount + " " + genre + " " + pluralGrammar;
     }
 }
