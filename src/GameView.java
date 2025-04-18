@@ -10,7 +10,7 @@ public class GameView {
 
     // Show the start screen (show basic instruction of the game and instructions)
     public String[] getPlayerNames() {
-        System.out.println("Hey there,welcome to Group 20's Movie Name Game");
+        System.out.println("Hey there, welcome to Group 20's Movie Name Game");
         System.out.println("Please enter the names of the two players.");
 
         // get player 1's name
@@ -23,6 +23,37 @@ public class GameView {
 
         // return both names as an array
         return new String[] { player1Name, player2Name };
+    }
+
+    public WinConditionStrategy getPlayersWinConditions() {
+        System.out.println("You have 3 win conditions to choose from! How would you like to beat your opponent?");
+        System.out.println("1. Genre");
+        System.out.println("2. Actor ");
+        System.out.println("3. Director");
+
+        int winConditionChoice = scanner.nextInt(); // may need more validation for user input
+
+        scanner.nextLine(); // move to nextLine
+
+        // OPTIONAL IMPLEMENTATION: Choosing 3 difference levels of difficulties
+        System.out.println("How difficult do you want to make the Battle?! (easy, medium, hard)");
+        
+        // clean user input 
+        // needs more validation
+        String difficulty = scanner.nextLine().toLowerCase().trim();
+
+        int count; // sets the count for the WinCondition!
+
+        if (difficulty.equals("easy")) {
+            count = 3;
+        } else if (difficulty.equals("hard")) {
+            count = 7;
+        } else {
+            count = 5; // default to medium
+        }
+
+        // TO DO: Add real logic later--check with others
+        return new GenreWinCondition("Horror", count); // default for now
     }
 
     // Display current game state to the user
