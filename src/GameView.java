@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameView {
     private Scanner scanner;
@@ -25,7 +28,7 @@ public class GameView {
         return new String[] { player1Name, player2Name };
     }
 
-    public WinConditionStrategy getPlayersWinConditions() {
+    public WinConditionStrategy getPlayersWinConditions(MovieDatabase movieDatabase) {
         System.out.println("You have 3 win conditions to choose from! How would you like to beat your opponent?");
         System.out.println("1. Genre");
         System.out.println("2. Actor ");
@@ -58,16 +61,49 @@ public class GameView {
 
         // Switch conditions for winConditionChoice
         switch (winConditionChoice) {
-            case "1": // genre based
-                String randomGenreGenerator = 
+            case 1: { // genre based
+                // cast list to set to index
+                List<String> genreList = new ArrayList<>(movieDatabase.getAllGenres());
+                int genreGenerator = ThreadLocalRandom.current().nextInt(genreList.size());
+                String randomGenre = genreList.get(genreGenerator);
+
+                System.out.println("You need to find " + count + " Movies with the Genre: " + randomGenre);
+                
+                // Initialises GenreWinCondition for Player!
+                return new GenreWinCondition(randomGenre, count);  
+            }  
+
+            case 2: {
+                // cast list to set to index
+                List<String> actorsList = new ArrayList<>(movieDatabase.getAllActors());
+                int actorGenerator = ThreadLocalRandom.current().nextInt(actorsList.size());
+                String randomActor = actorsList.get(actorGenerator);
+
+                System.out.println("You need to find " + count + " Movies with the Actor: " + randomActor);
+                
+                // Initialises ActorWinCondition for Player!
+                return new ActorWinCondition(randomActor, count);  
+            }
+
+            case 3: {
+                // cast list to set to index
+                List<String> directorList = new ArrayList<>(movieDatabase.getAllDirectors());
+                int directorGenerator = ThreadLocalRandom.current().nextInt(directorList.size());
+                String randomDirector = directorList.get(directorGenerator);
+
+                System.out.println("You need to find " + count + " Movies with the Director: " + randomDirector);
+                
+                // Initialises DirectorWinCondition for Player!
+                return new DirectorWinCondition(randomDirector, count);  
+            }
+
+            // default example in case of issues
+            default: {
+                System.out.println("Invalid input...Defaulting to genre 'Action'");
+                return new GenreWinCondition("Action", count);
+            }
+              
         }
-
-
-
-
-
-        // TO DO: Add real logic later--check with others
-        return new GenreWinCondition("Horror", count); // default for now
     }
 
     // Display current game state to the user
