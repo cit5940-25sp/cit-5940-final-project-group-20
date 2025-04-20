@@ -40,6 +40,26 @@ public class Movie {
         return actors;
     }
 
+    public void setActors(List<String> actors) {
+        this.actors = actors;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+
+    public void setCinematographer(String cinematographer) {
+        this.cinematographer = cinematographer;
+    }
+
+    public void setComposer(String composer) {
+        this.composer = composer;
+    }
+
     public String getDirector() {
         return director;
     }
