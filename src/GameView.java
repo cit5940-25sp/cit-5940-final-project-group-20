@@ -44,13 +44,27 @@ public class GameView {
 
         int count; // sets the count for the WinCondition!
 
-        if (difficulty.equals("easy")) {
-            count = 3;
-        } else if (difficulty.equals("hard")) {
-            count = 7;
-        } else {
-            count = 5; // default to medium
+        // Implement difficulty levels as switch conditions
+        switch (difficulty) {
+            case "easy":
+                count = 3;
+                break;
+            case "hard":
+                count = 7;
+                break;
+            default:
+                count = 5;
         }
+
+        // Switch conditions for winConditionChoice
+        switch (winConditionChoice) {
+            case "1": // genre based
+                String randomGenreGenerator = 
+        }
+
+
+
+
 
         // TO DO: Add real logic later--check with others
         return new GenreWinCondition("Horror", count); // default for now
