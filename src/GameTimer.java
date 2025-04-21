@@ -13,7 +13,7 @@ public class GameTimer {
     }
 
     // Start the timer and begin counting down
-    public void start(Runnable onTimeout) {
+    public void start(Runnable onTimeout, java.util.function.IntConsumer onTick) {
         this.onTimeout = onTimeout;
         this.timeUp = false;
         this.startTime = System.currentTimeMillis();  // Record the start time
@@ -24,11 +24,10 @@ public class GameTimer {
                 while (!timeUp && (System.currentTimeMillis() - startTime) < duration * 1000) {
                     Thread.sleep(1000);  // Sleep for 1 second
                     int secondsRemaining = getTimeRemaining();
-                    // Update the timer display (this could be done in the GameView)
-                    // overwrite previous time using \r
-                    System.out.print("\rTime remaining: " + secondsRemaining + " seconds");
 
-                    // Trigger timeout if time is up
+                    // call othe onTick function to update the UI via gameview
+                    onTick.accept(secondsRemaining);
+
                     if (secondsRemaining == 0) {
                         timeUp = true;
                         onTimeout.run();  // Run the timeout event (e.g., switch player)

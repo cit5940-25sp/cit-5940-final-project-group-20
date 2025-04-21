@@ -76,6 +76,12 @@ public class Movie {
         return composer;
     }
 
+    @Override
+    public String toString() {
+        return title;
+    }
+
+
     // Check if this movie connects to another movie via a specific connection type
     public boolean hasConnection(Movie other, ConnectionStrategy connection) {
         // to be implemented

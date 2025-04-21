@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public  class GenreConnection implements ConnectionStrategy {
@@ -6,10 +7,16 @@ public  class GenreConnection implements ConnectionStrategy {
     // Assuming that one movie has multiple genres
     @Override
     public boolean areConnected(Movie a, Movie b) {
-        Set<String> genresB = new HashSet<>(b.getGenres());
+        List<String> genresA = a.getGenres();
+        List<String> genresB = b.getGenres();
 
-        for (String genreA : a.getGenres()) {
-            if (genresB.contains(genreA)) {
+        if (genresA == null || genresB == null) {
+            return false;
+        }
+
+        Set<String> genreSetB = new HashSet<>(genresB);
+        for (String genre : genresA) {
+            if (genreSetB.contains(genre)) {
                 return true;
             }
         }
@@ -20,5 +27,5 @@ public  class GenreConnection implements ConnectionStrategy {
     @Override
     public String getType() {
         return "Genre";
-    } 
+    }
 }

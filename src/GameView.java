@@ -118,6 +118,7 @@ public class GameView {
         System.out.println("Movies Played: " + gameState.getPlayedMovies());
         System.out.println("Score: " + currentPlayer.getScore());
         System.out.println("-------------------");
+        System.out.print(currentPlayer.getName() + ", enter movie title: ");
     }
 
     // Ask user for movie name input
@@ -140,5 +141,9 @@ public class GameView {
     // Display time left on screen (could be seconds or countdown)
     public void showTimer(int secondsRemaining) {
         System.out.println("Time remaining: " + secondsRemaining + " seconds");
+    }
+
+    public void showMessage(String message) {
+        System.out.println(message);
     }
 }

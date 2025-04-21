@@ -1,4 +1,3 @@
-import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class MovieNameGame {
             new WriterConnection(),
             new ComposerConnection(),
             new CinematographerConnection(),
-            new GenreConnection() // Added Genre Connection 
+            new GenreConnection()
         );
 
 

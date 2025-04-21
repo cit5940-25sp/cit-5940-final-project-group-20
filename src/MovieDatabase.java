@@ -4,23 +4,51 @@
 
 
 import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class MovieDatabase {
     private Map<String, Movie> movies;
     private AutoCompleteIndex autocomplete;
 
 
-    // Constructor...NOT SURE HOW YOU WILL EXTRACT YOUR DATA SO THIS iS REALLY UP TO YOU
-    // You may want to store extracted movies in here, into a hashmap or smth and then 
-    //... use that hashmap to work with the functions down below!! But idk whatever
+    // Trying to import Frida's CSVImporter to create movie database out of CSV file
     public MovieDatabase() {
         // here I am adding some movies to mock testing
         this.movies = new HashMap<>();
-        // add some movies here
-        movies.put("Die Hard", new Movie("Die Hard", 1988, Arrays.asList("Bruce Willis", "Alan Rickman"),
-                "John McTiernan", "Steven E. de Souza", "Jan de Bont", "Michael Kamen", Arrays.asList("Action", "Thriller")));
-        movies.put("Terminator", new Movie("Terminator", 1984, Arrays.asList("Arnold Schwarzenegger"),
-                "James Cameron", "James Cameron", "Adam Greenberg", "Brad Fiedel", Arrays.asList("Action", "Sci-Fi")));
+
+
+        CSVDataImporter importer = new CSVDataImporter();
+        Map<Integer, Movie> imported = importer.importDataMovie("tmdb_5000_movies.csv");
+        imported = importer.importDataCredit("tmdb_5000_credits.csv", imported);
+
+
+
+        // Populate internal Map<String, Movie> using movie titles as keys
+        for (Movie movie : imported.values()) {
+            movies.put(movie.getTitle(), movie);
+        }
+
+        // Write all movie info to MovieDatabase.txt this
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("movieDatabase.txt"))) {
+            for (Movie movie : imported.values()) {
+                writer.write("Title: " + movie.getTitle() + "\n");
+                writer.write("Release Year: " + movie.getReleaseYear() + "\n");
+                writer.write("Actors: " + movie.getActors() + "\n");
+                writer.write("Director: " + movie.getDirector() + "\n");
+                writer.write("Writer: " + movie.getWriter() + "\n");
+                writer.write("Cinematographer: " + movie.getCinematographer() + "\n");
+                writer.write("Composer: " + movie.getComposer() + "\n");
+                writer.write("Genres: " + movie.getGenres() + "\n");
+                writer.write("--------------------------------------------------\n");
+            }
+            System.out.println("Movie information written to output.txt");
+        } catch (IOException e) {
+            System.err.println("Error writing to output.txt: " + e.getMessage());
+        }
+
     }
 
     // Add a new movie to the database

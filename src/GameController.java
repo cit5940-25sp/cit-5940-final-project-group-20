@@ -34,11 +34,22 @@ public class GameController {
         List<Player> players = Arrays.asList(player1, player2);
 
         // Initialize the game state with players and a starting movie
+        // now its hardcoded but we will need some randomization based on
+        // winning strategy -- choose a movie that could allow both players' win strategy
+        // some concerns I have are:
+            // some movies in the database have (null) in this case some users might get stuck?
+
         Movie startingMovie = movieDatabase.getMovieByTitle("Die Hard");
         gameState.initializeGame(players, startingMovie);
 
-        // PLAYING GAME
+        // show initial display game state
+        gameView.displayGameState(gameState);
+
+
+        // Start playing game
         while (!gameState.isGameOver()) {
+            // continue to switch turn once the game start
+            // until the game ends
             handleTurn();
         }
 
@@ -49,63 +60,57 @@ public class GameController {
     // Called each turn to handle what a player does
     public void handleTurn() {
         Player currentPlayer = gameState.getCurrentPlayer();
-        gameView.displayGameState(gameState); // display current game state
 
-        // start the timer for the player's turn
+
         gameTimer.start(() -> {
-            gameView.showError("time is up! switching to next player.");
-            switchPlayer(); // switch player if the time is up
+            gameView.showMessage("Time is up! switching to next player.");
+            endTurnAndSwitchPlayer();
+        }, secondsRemaining -> {
+            /** implement timer visualization once we have Front End
+             gameView.showTimer(secondsRemaining);
+             */
         });
 
-        // allow player to make multiple guesses within the time limit
+        // Prompt the player for one guess only
+        String movieTitle = gameView.getPlayerInput("");
+        Movie nextMovie = movieDatabase.getMovieByTitle(movieTitle);
+
+        if (nextMovie == null) {
+            gameView.showMessage("Movie not found. Turn skipped.");
+            endTurnAndSwitchPlayer();  // End turn on invalid title
+            return;
+        }
         boolean isValidMove = false;
-        while (!gameTimer.isTimeUp() && !isValidMove) {
-            // Get the player's input (movie title)
-            System.out.print("\rTime remaining: " + gameTimer.getTimeRemaining() + " seconds"); // Overwrite timer on same line
-            // Flush the output to ensure the timer prints immediately
-            System.out.flush();
 
-
-            // Get the player's input on the next line
-            String movieTitle = gameView.getPlayerInput("\nEnter movie title: "); // Input on new line after timer
-            Movie nextMovie = movieDatabase.getMovieByTitle(movieTitle);
-
-            if (nextMovie == null) {
-                gameView.showError("Movie not found. Please try again.");
-                continue; // as long as 30 sec not over, users can make more guesses
+        // Check all connection types
+        for (ConnectionStrategy connection : connectionStrategies) {
+            if (connection.areConnected(gameState.getCurrentMovie(), nextMovie)) {
+                isValidMove = true;
+                gameState.updateState(nextMovie, connection.getType());
+                currentPlayer.addMovie(nextMovie);
+                break;
             }
-
-            // check all possible connection types to see if the movie is valid
-            for (ConnectionStrategy connection : connectionStrategies) {
-                if (connection.areConnected(gameState.getCurrentMovie(), nextMovie)) {
-                    // If a valid connection is found, mark move as valid
-                    isValidMove = true;
-                    gameState.updateState(nextMovie, connection.getType());  // Update the game state
-                    currentPlayer.addMovie(nextMovie); // add the movie to the player's list and increment score
-                    break;
-                }
-            }
-
-            if (!isValidMove) {
-                gameView.showError("Invalid connection. Try again.");
-            }
-
         }
 
         if (isValidMove) {
-            // If the move is valid, check for win condition
             if (currentPlayer.hasWon(winConditionStrategy)) {
                 gameState.setGameOver(true);
-                gameView.showWinner(currentPlayer);  // Show winner if player wins
+                gameView.showWinner(currentPlayer);
             } else {
-                switchPlayer();  // Switch to the next player
+                endTurnAndSwitchPlayer();  // Valid move, but game continues
             }
+        } else {
+            gameView.showError("Invalid connection. Turn skipped.");
+            endTurnAndSwitchPlayer();  // Invalid move ends the turn
         }
     }
 
-    // Switch to the next player
-    public void switchPlayer() {
+    private void endTurnAndSwitchPlayer() {
         gameState.switchPlayer();
+        gameState.incrementRound();
+        gameView.displayGameState(gameState);
+        handleTurn();
     }
+
 }
 
