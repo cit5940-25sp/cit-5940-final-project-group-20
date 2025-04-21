@@ -51,37 +51,38 @@ public class GameController {
         Player currentPlayer = gameState.getCurrentPlayer();
         gameView.displayGameState(gameState); // display current game state
 
-        // start the timer for the player's turn
+
         gameTimer.start(() -> {
-            gameView.showError("time is up! switching to next player.");
+            gameView.showError("Time is up! switching to next player.");
             switchPlayer(); // switch player if the time is up
+        }, secondsRemaining -> {
+            /** implement timer visualization once we have Front End
+            gameView.showTimer(secondsRemaining);
+             */
         });
+
 
         // allow player to make multiple guesses within the time limit
         boolean isValidMove = false;
+
+        // Show turn-start message via GameView
+        gameView.showTurnStartMessage();
+
         while (!gameTimer.isTimeUp() && !isValidMove) {
-            // Get the player's input (movie title)
-            System.out.print("\rTime remaining: " + gameTimer.getTimeRemaining() + " seconds"); // Overwrite timer on same line
-            // Flush the output to ensure the timer prints immediately
-            System.out.flush();
-
-
-            // Get the player's input on the next line
-            String movieTitle = gameView.getPlayerInput("\nEnter movie title: "); // Input on new line after timer
+            String movieTitle = gameView.getPlayerInput("\nEnter movie title: ");
             Movie nextMovie = movieDatabase.getMovieByTitle(movieTitle);
 
             if (nextMovie == null) {
                 gameView.showError("Movie not found. Please try again.");
-                continue; // as long as 30 sec not over, users can make more guesses
+                continue; // allow retry within timer
             }
 
-            // check all possible connection types to see if the movie is valid
+            // Check all strategies
             for (ConnectionStrategy connection : connectionStrategies) {
                 if (connection.areConnected(gameState.getCurrentMovie(), nextMovie)) {
-                    // If a valid connection is found, mark move as valid
                     isValidMove = true;
-                    gameState.updateState(nextMovie, connection.getType());  // Update the game state
-                    currentPlayer.addMovie(nextMovie); // add the movie to the player's list and increment score
+                    gameState.updateState(nextMovie, connection.getType());
+                    currentPlayer.addMovie(nextMovie);
                     break;
                 }
             }
@@ -89,16 +90,14 @@ public class GameController {
             if (!isValidMove) {
                 gameView.showError("Invalid connection. Try again.");
             }
-
         }
 
         if (isValidMove) {
-            // If the move is valid, check for win condition
             if (currentPlayer.hasWon(winConditionStrategy)) {
                 gameState.setGameOver(true);
-                gameView.showWinner(currentPlayer);  // Show winner if player wins
+                gameView.showWinner(currentPlayer);
             } else {
-                switchPlayer();  // Switch to the next player
+                switchPlayer();
             }
         }
     }

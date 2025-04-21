@@ -10,7 +10,8 @@ public class MovieNameGame {
         MovieDatabase movieDatabase = new MovieDatabase(); // this is not populated with movie database yet
         List<ConnectionStrategy> connectionStrategies = Arrays.asList(
                 new ActorConnection(), new DirectorConnection(),
-                new WriterConnection(), new ComposerConnection(), new CinematographerConnection());
+                new WriterConnection(), new ComposerConnection(), new CinematographerConnection(),
+                new GenreConnection());
 
         WinConditionStrategy winConditionStrategy = new GenreWinCondition("Horror", 5); // default or example win condition
 

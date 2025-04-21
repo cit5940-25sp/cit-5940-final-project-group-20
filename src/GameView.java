@@ -8,6 +8,7 @@ public class GameView {
         this.scanner = new Scanner(System.in);
     }
 
+
     // Show the start screen (show basic instruction of the game and instructions)
     public String[] getPlayerNames() {
         System.out.println("Hey there,welcome to Group 20's Movie Name Game");
@@ -39,6 +40,11 @@ public class GameView {
         System.out.println("-------------------");
     }
 
+    // Display the message at the start of each turn
+    public void showTurnStartMessage() {
+        System.out.println("You have 30 seconds to answer.");
+    }
+
     // Ask user for movie name input
     public String getPlayerInput(String prompt) {
         System.out.print(prompt);
@@ -56,8 +62,8 @@ public class GameView {
         System.out.println("You have won the game!");
     }
 
-    // Display time left on screen (could be seconds or countdown)
     public void showTimer(int secondsRemaining) {
-        System.out.println("Time remaining: " + secondsRemaining + " seconds");
+        System.out.print("Time remaining: " + secondsRemaining + " seconds");
     }
+
 }
