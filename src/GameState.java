@@ -7,18 +7,18 @@ public class GameState {
     private Set<Movie> playedMovies; // set to track all played moview
     private int round; // how many rounds have we gone (current round number)
     private Map<String, Integer> connectionUsageCount; // connection usage count for each type (actor, director etc)
-    private WinConditionStrategy winConditionStrategy; // win condition strategy
+    private Map<Player, WinConditionStrategy> playerWinConditions; // Individual WinConditions for each player!
     private boolean isGameOver; // check if the game is over
 
     // construct and initialize
     public GameState() {
-        this.players = null; // only players are initialized once they type in names
+        this.players =  new ArrayList<>(); // only players are initialized once they type in names
         this.currentPlayerIndex = 0; // player 1 starts
         this.currentMovie = null;
         this.playedMovies = new HashSet<>(); // can't play movies that's been already played
         this.round = 1; // start from round 1
         this.connectionUsageCount = new HashMap<>();
-        this.winConditionStrategy = null;
+        this.playerWinConditions = new HashMap<>();
         this.isGameOver = false;
     }
 
@@ -93,13 +93,31 @@ public class GameState {
 
     // check if a player has won based on the win condition
     public boolean hasPlayerWon(Player player) {
-        return winConditionStrategy.isSatisfied(player); // check ifi player satisfies win condition
+        // extracts win condition of given player
+        WinConditionStrategy winCon = playerWinConditions.get(player);
+        
+        if (winCon != null) {
+            return winCon.isSatisfied(player); 
+        }
+
+        return false;
     }
 
     // Set the win condition strategy
-    public void setWinCondition(WinConditionStrategy winConditionStrategy) {
-        this.winConditionStrategy = winConditionStrategy;
+    public void setWinConditionPlayer(Player player, WinConditionStrategy winCondition) {
+        if (!players.contains(player)) {    // check player is initialised correctly
+            players.add(player);
+        }
+        // update hashmap to reflect player + individual win condition
+        playerWinConditions.put(player, winCondition);
+        
     }
+
+    // Wincondition getter method 
+    public WinConditionStrategy getWinConditionPlayer(Player player) {
+        return playerWinConditions.get(player);
+    }
+
 
     // Is the game finished based on win condition or other rules?
     public boolean isGameOver() {

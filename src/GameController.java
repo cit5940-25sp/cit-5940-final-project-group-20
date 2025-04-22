@@ -6,16 +6,16 @@ public class GameController {
     private GameState gameState;
     private MovieDatabase movieDatabase;
     private List<ConnectionStrategy> connectionStrategies;
-    private WinConditionStrategy winConditionStrategy;
+    // private WinConditionStrategy winConditionStrategy;
     private GameTimer gameTimer;
 
     public GameController(GameState gameState, GameView gameView, MovieDatabase movieDatabase,
-                          List<ConnectionStrategy> connectionStrategies, WinConditionStrategy winConditionStrategy) {
+                          List<ConnectionStrategy> connectionStrategies) {
         this.gameState = gameState;
         this.gameView = gameView;
         this.movieDatabase = movieDatabase;
         this.connectionStrategies = connectionStrategies;
-        this.winConditionStrategy = winConditionStrategy;
+        // this.winConditionStrategy = winConditionStrategy;
         this.gameTimer = new GameTimer(30); // set the timer to 30 sec for each turn
     }
 
@@ -37,9 +37,19 @@ public class GameController {
         // now its hardcoded but we will need some randomization based on
         // winning strategy -- choose a movie that could allow both players' win strategy
         // some concerns I have are:
-            // some movies in the database have (null) in this case some users might get stuck?
+        // some movies in the database have (null) in this case some users might get stuck?
+
+        // Initialising Winning Strategy for each Player
+        WinConditionStrategy winConPlayer1 = gameView.getPlayersWinConditions(movieDatabase);
+        WinConditionStrategy winConPlayer2 = gameView.getPlayersWinConditions(movieDatabase);
+        
+        // Add each win condition in GameState for each player
+        gameState.setWinConditionPlayer(player1, winConPlayer1);
+        gameState.setWinConditionPlayer(player2, winConPlayer2);
+
 
         Movie startingMovie = movieDatabase.getMovieByTitle("Die Hard");
+        
         gameState.initializeGame(players, startingMovie);
 
         // show initial display game state
@@ -93,7 +103,7 @@ public class GameController {
         }
 
         if (isValidMove) {
-            if (currentPlayer.hasWon(winConditionStrategy)) {
+            if (gameState.hasPlayerWon(currentPlayer)) {
                 gameState.setGameOver(true);
                 gameView.showWinner(currentPlayer);
             } else {
