@@ -101,10 +101,10 @@ public class MovieDatabase {
         Map<String, Integer> actorCount = new HashMap<>();
 
         for (Movie movie : getAllMovies()) {
-            for (String actor : movie.getActors()) {
-                // sets count
-                int count = actorCount.containsKey(actor) ? actorCount.get(actor) + 1 : 1;
-                actorCount.put(actor, count);
+            if (movie.getActors() != null) {  // NULL CHECK AS SOME ACTORS for movies not listed!
+                for (String actor : movie.getActors()) {
+                    actorCount.put(actor, actorCount.getOrDefault(actor, 0) + 1);
+                }
             }
         }
 
@@ -137,7 +137,7 @@ public class MovieDatabase {
         Set<String> eligibleDirectors = new HashSet<>();
 
         for (Map.Entry<String, Integer> director : directorCount.entrySet()) {
-            if (director.getValue() >= 10) {
+            if (director.getKey() != null && director.getValue() >= 10 && !director.getKey().equals("null")) {
                 eligibleDirectors.add(director.getKey());
             }
         }

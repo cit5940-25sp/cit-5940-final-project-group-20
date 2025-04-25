@@ -17,21 +17,32 @@ public class CSVDataImporter implements IDataImporter {
     public Map<Integer, Movie> importDataMovie(String file) {
         Map<Integer, Movie> hash = new HashMap<>();
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
-            // Read and print the header
-            String[] header = reader.readNext();
-            if (header != null) {
-                System.out.println("\nHeader: " + String.join(", ", header));
+            String[] header;
+            try {
+                header = reader.readNext();
+                if (header != null) {
+                    System.out.println("\nHeader: " + String.join(", ", header));
+                }
+            } catch (CsvValidationException e) {
+                System.err.println("CSV validation error while reading header: " + e.getMessage());
+                e.printStackTrace();
+                return hash;
             }
 
-            // Read and print each line
             String[] nextLine;
             int rowNumber = 1;
 
-            while ((nextLine = reader.readNext()) != null) {
+            while (true) {
+                try {
+                    nextLine = reader.readNext();
+                    if (nextLine == null) break;
+                } catch (CsvValidationException e) {
+                    System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
+                    e.printStackTrace();
+                    rowNumber++;
+                    continue;
+                }
 
-                /*for (int i = 0; i < nextLine.length; i++) {
-                    System.out.println("  " + header[i] + ": " + nextLine[i]);
-                }*/
                 String genrejson = nextLine[1];
                 JSONArray genrearray;
                 try {
@@ -48,23 +59,26 @@ public class CSVDataImporter implements IDataImporter {
                     rowNumber++;
                     continue;
                 }
+
                 int id = Integer.parseInt(nextLine[3]);
                 SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = null;
+                Date date;
                 try {
                     date = parser.parse(releasedate);
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    System.err.println("Skipping row " + rowNumber + " due to invalid date: " + releasedate);
+                    rowNumber++;
+                    continue;
                 }
+
                 int releaseYear = date.getYear() + 1900;
                 List<String> genres = new ArrayList<>();
                 for (int i = 0; i < genrearray.length(); i++) {
                     String genrename = ((JSONObject) genrearray.get(i)).getString("name");
                     genres.add(genrename);
                 }
-                Movie movie = new Movie(title, releaseYear, null, null,
-                        null, null, null, genres);
 
+                Movie movie = new Movie(title, releaseYear, null, null, null, null, null, genres);
                 hash.put(id, movie);
                 rowNumber++;
             }
@@ -77,20 +91,38 @@ public class CSVDataImporter implements IDataImporter {
     }
 
 
+
     public Map<Integer, Movie> importDataCredit(String file, Map<Integer, Movie> movies) {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
-
+    
             // Read and print the header
-            String[] header = reader.readNext();
-            if (header != null) {
-                System.out.println("\nHeader: " + String.join(", ", header));
+            String[] header;
+            try {
+                header = reader.readNext();
+                if (header != null) {
+                    System.out.println("\nHeader: " + String.join(", ", header));
+                }
+            } catch (CsvValidationException e) {
+                System.err.println("CSV validation error while reading header: " + e.getMessage());
+                e.printStackTrace();
+                return movies;
             }
-
+    
             // Read and print each line
             String[] nextLine;
             int rowNumber = 1;
-
-            while ((nextLine = reader.readNext()) != null) {
+    
+            while (true) {
+                try {
+                    nextLine = reader.readNext();
+                    if (nextLine == null) break;
+                } catch (CsvValidationException e) {
+                    System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
+                    e.printStackTrace();
+                    rowNumber++;
+                    continue;
+                }
+    
                 int id = Integer.parseInt(nextLine[0]);
                 try {
                     id = Integer.parseInt(nextLine[0]);
@@ -98,7 +130,7 @@ public class CSVDataImporter implements IDataImporter {
                     System.err.println("Skipping credit row " + rowNumber + " due to invalid ID: " + nextLine[0]);
                     continue;
                 }
-
+    
                 if (!movies.containsKey(id)) {
                     System.err.println("Skipping credit row " + rowNumber + " - Movie ID " + id + " not found in movie map.");
                     continue;
@@ -112,16 +144,14 @@ public class CSVDataImporter implements IDataImporter {
                     movies.remove(id);
                     continue;
                 }
-
-
+    
                 List<String> actors = new ArrayList<>();
-
+    
                 for (int i = 0; i < castarray.length(); i++) {
                     String castname = ((JSONObject) castarray.get(i)).getString("name");
                     actors.add(castname);
                 }
-
-
+    
                 String crewjson = nextLine[3];
                 JSONArray crewarray;
                 try {
@@ -136,8 +166,7 @@ public class CSVDataImporter implements IDataImporter {
                 String writer = null;
                 String cinematographer = null;
                 String composer = null;
-
-
+    
                 for (int i = 0; i < crewarray.length(); i++) {
                     String crewname = ((JSONObject) crewarray.get(i)).getString("name");
                     String crewjob = ((JSONObject) crewarray.get(i)).getString("job");
@@ -157,24 +186,23 @@ public class CSVDataImporter implements IDataImporter {
                         composer = crewname;
                         continue;
                     }
-
                 }
                 movies.get(id).setActors(actors);
                 movies.get(id).setDirector(director);
                 movies.get(id).setWriter(writer);
                 movies.get(id).setCinematographer(cinematographer);
                 movies.get(id).setComposer(composer);
-
-
+    
                 rowNumber++;
             }
-
+    
         } catch (IOException e) {
             System.err.println("Error reading the CSV file: " + e.getMessage());
             e.printStackTrace();
         }
         return movies;
     }
+    
 
 
     private boolean hasHeader() {
