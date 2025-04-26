@@ -23,7 +23,7 @@ public class CSVDataImporter implements IDataImporter {
                 if (header != null) {
                     System.out.println("\nHeader: " + String.join(", ", header));
                 }
-            } catch (CsvValidationException e) {
+            } catch (IOException e) {
                 System.err.println("CSV validation error while reading header: " + e.getMessage());
                 e.printStackTrace();
                 return hash;
@@ -36,7 +36,7 @@ public class CSVDataImporter implements IDataImporter {
                 try {
                     nextLine = reader.readNext();
                     if (nextLine == null) break;
-                } catch (CsvValidationException e) {
+                } catch (IOException e) {
                     System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
                     e.printStackTrace();
                     rowNumber++;
@@ -70,8 +70,9 @@ public class CSVDataImporter implements IDataImporter {
                     rowNumber++;
                     continue;
                 }
-
-                int releaseYear = date.getYear() + 1900;
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int releaseYear = calendar.get(Calendar.YEAR);
                 List<String> genres = new ArrayList<>();
                 for (int i = 0; i < genrearray.length(); i++) {
                     String genrename = ((JSONObject) genrearray.get(i)).getString("name");
@@ -102,7 +103,7 @@ public class CSVDataImporter implements IDataImporter {
                 if (header != null) {
                     System.out.println("\nHeader: " + String.join(", ", header));
                 }
-            } catch (CsvValidationException e) {
+            } catch (IOException e) {
                 System.err.println("CSV validation error while reading header: " + e.getMessage());
                 e.printStackTrace();
                 return movies;
@@ -116,7 +117,7 @@ public class CSVDataImporter implements IDataImporter {
                 try {
                     nextLine = reader.readNext();
                     if (nextLine == null) break;
-                } catch (CsvValidationException e) {
+                } catch (IOException e) {
                     System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
                     e.printStackTrace();
                     rowNumber++;
