@@ -1,5 +1,4 @@
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

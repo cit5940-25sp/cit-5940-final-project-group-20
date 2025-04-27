@@ -39,7 +39,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../opencsv-5.7.1.jar!/" />
@@ -66,5 +66,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="googlecode.lanterna" level="project" />
   </component>
 </module>

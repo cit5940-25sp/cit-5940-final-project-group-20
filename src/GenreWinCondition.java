@@ -25,7 +25,13 @@ public class GenreWinCondition implements WinConditionStrategy {
 
     @Override
     public String getConditionType() {
-        String pluralGrammar = (requiredCount > 1) ? "movies" : "movie"; 
-        return "Play " + requiredCount + " " + genre + " " + pluralGrammar;
+        return "Genre"; // only return TYPE not formatted sentence because
+        // we want to keep MVC model where prints happen inside View class
+    }
+    public String getGenre() {
+        return genre;
+    }
+    public int getRequiredCount() {
+        return requiredCount;
     }
 }

@@ -16,12 +16,6 @@ public class MovieNameGame {
             new GenreConnection()
         );
 
-
-        // TO DO: Here make two WinConditions for each player!
-        // Passed in from GameView
-
-        // WinConditionStrategy winConditionStrategy = new GenreWinCondition("Horror", 5); // default or example win condition
-
         // create the game controller instance
         GameController gameController = new GameController(
                 gameState, gameView, movieDatabase, connectionStrategies);

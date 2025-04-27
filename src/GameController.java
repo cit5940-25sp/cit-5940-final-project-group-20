@@ -1,13 +1,23 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import com.googlecode.lanterna.input.KeyStroke;
 
 public class GameController {
     private GameView gameView;
     private GameState gameState;
     private MovieDatabase movieDatabase;
     private List<ConnectionStrategy> connectionStrategies;
-    // private WinConditionStrategy winConditionStrategy;
-    private GameTimer gameTimer;
+    private ScheduledExecutorService scheduler;
+
+    private volatile boolean turnActive = false;
+    private volatile int secondsRemaining = 30;
+    private volatile boolean timeoutOccurred = false;
+    private ScheduledFuture<?> timerTask; //
 
     public GameController(GameState gameState, GameView gameView, MovieDatabase movieDatabase,
                           List<ConnectionStrategy> connectionStrategies) {
@@ -15,112 +25,183 @@ public class GameController {
         this.gameView = gameView;
         this.movieDatabase = movieDatabase;
         this.connectionStrategies = connectionStrategies;
-        // this.winConditionStrategy = winConditionStrategy;
-        this.gameTimer = new GameTimer(30); // set the timer to 30 sec for each turn
+        this.scheduler = Executors.newScheduledThreadPool(1);
     }
 
-    // Start the game
     public void startGame() {
-        // START GAME
-        String[] playerNames = gameView.getPlayerNames(); // get names as an array
+        String[] playerNames = gameView.getPlayerNames();
 
-        // initialize players
-        String player1Name = playerNames[0];
-        String player2Name = playerNames[1];
-        Player player1 = new Player(player1Name);
-        Player player2 = new Player(player2Name);
-
-        // store player info here
+        Player player1 = new Player(playerNames[0]);
+        Player player2 = new Player(playerNames[1]);
         List<Player> players = Arrays.asList(player1, player2);
 
-        // Initialize the game state with players and a starting movie
-        // now its hardcoded but we will need some randomization based on
-        // winning strategy -- choose a movie that could allow both players' win strategy
-        // some concerns I have are:
-        // some movies in the database have (null) in this case some users might get stuck?
-
-        // Initialising Winning Strategy for each Player
-        WinConditionStrategy winConPlayer1 = gameView.getPlayersWinConditions(movieDatabase);
-        WinConditionStrategy winConPlayer2 = gameView.getPlayersWinConditions(movieDatabase);
-        
-        // Add each win condition in GameState for each player
-        gameState.setWinConditionPlayer(player1, winConPlayer1);
-        gameState.setWinConditionPlayer(player2, winConPlayer2);
-
+        player1.setWinCondition(gameView.getPlayersWinConditions(movieDatabase));
+        player2.setWinCondition(gameView.getPlayersWinConditions(movieDatabase));
 
         Movie startingMovie = movieDatabase.getMovieByTitle("Die Hard");
-        
+
         gameState.initializeGame(players, startingMovie);
+        // whichever the initial movie is set, it should be added to playedmovies
+        gameState.addPlayedMovie(startingMovie);
 
-        // show initial display game state
-        gameView.displayGameState(gameState);
-
-
-        // Start playing game
-        while (!gameState.isGameOver()) {
-            // continue to switch turn once the game start
-            // until the game ends
-            handleTurn();
-        }
-
-        // GAME ENDS
-        gameView.showWinner(gameState.getWinner());
+        startTurn();
     }
 
-    // Called each turn to handle what a player does
-    public void handleTurn() {
+    private void startTurn() {
+        if (gameState.isGameOver()) {
+            return;
+        }
+
         Player currentPlayer = gameState.getCurrentPlayer();
+        gameView.displayGameState(gameState);
 
+        secondsRemaining = 30;
+        turnActive = true;
+        timeoutOccurred = false;
 
-        gameTimer.start(() -> {
-            gameView.showMessage("Time is up! switching to next player.");
+        startTimer();
+
+        StringBuilder inputBuffer = new StringBuilder();
+
+        while (turnActive && !gameState.isGameOver()) {
+            KeyStroke keyStroke = gameView.pollInput();
+
+            if (keyStroke != null) {
+                switch (keyStroke.getKeyType()) {
+                    case Character:
+                        inputBuffer.append(keyStroke.getCharacter());
+                        gameView.updatePlayerInput(inputBuffer.toString());
+                        break;
+                    case Enter:
+                        String submitted = inputBuffer.toString().trim();
+                        inputBuffer.setLength(0);
+                        gameView.updatePlayerInput("");
+                        handlePlayerMove(submitted);
+                        break;
+                    case Backspace:
+                        if (inputBuffer.length() > 0) {
+                            inputBuffer.deleteCharAt(inputBuffer.length() - 1);
+                            gameView.updatePlayerInput(inputBuffer.toString());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (timeoutOccurred) {
+                break; // clean exit after timeout
+            }
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        // after exiting loop (timeout or valid move), if still playing
+        if (!gameState.isGameOver()) {
             endTurnAndSwitchPlayer();
-        }, secondsRemaining -> {
-            /** implement timer visualization once we have Front End
-             gameView.showTimer(secondsRemaining);
-             */
-        });
+            startTurn();
+        }
+    }
 
-        // Prompt the player for one guess only
-        String movieTitle = gameView.getPlayerInput("");
+    private void startTimer() {
+        if (timerTask != null && !timerTask.isDone()) {
+            timerTask.cancel(true);
+        }
+
+        timerTask = scheduler.scheduleAtFixedRate(() -> {
+            if (turnActive && secondsRemaining > 0) {
+                secondsRemaining--;
+                try {
+                    updateScreen();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                if (secondsRemaining == 0) {
+                    timeout();
+                }
+            }
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private void timeout() {
+        stopTimer();
+        timeoutOccurred = true;
+        turnActive = false;
+
+        try {
+            gameView.showMessageAndPause("Time is up! Switching player...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopTimer() {
+        turnActive = false;
+        if (timerTask != null && !timerTask.isDone()) {
+            timerTask.cancel(true);
+        }
+    }
+
+    private void updateScreen() {
+        gameView.updateTimerOnly(secondsRemaining);
+    }
+
+    private void handlePlayerMove(String movieTitle) {
         Movie nextMovie = movieDatabase.getMovieByTitle(movieTitle);
 
         if (nextMovie == null) {
-            gameView.showMessage("Movie not found. Turn skipped.");
-            endTurnAndSwitchPlayer();  // End turn on invalid title
+            gameView.showMessageAndPause("Movie not found. Try again!");
             return;
         }
-        boolean isValidMove = false;
 
-        // Check all connection types
+        // also check if the movie is already used!
+        if (gameState.getPlayedMovies().contains(nextMovie)) {
+            gameView.showMessageAndPause("This movie has already been used!");
+            return;
+        }
+
+
+        boolean isValidMove = false;
         for (ConnectionStrategy connection : connectionStrategies) {
             if (connection.areConnected(gameState.getCurrentMovie(), nextMovie)) {
                 isValidMove = true;
+                Player currentPlayer = gameState.getCurrentPlayer();
+                gameState.addPlayedMovie(nextMovie);
                 gameState.updateState(nextMovie, connection.getType());
                 currentPlayer.addMovie(nextMovie);
+
+                if (currentPlayer.hasWon()) {
+                    gameState.setGameOver(true);
+                    gameView.showWinner(currentPlayer);
+                    return;
+                }
                 break;
             }
         }
 
         if (isValidMove) {
-            if (gameState.hasPlayerWon(currentPlayer)) {
-                gameState.setGameOver(true);
-                gameView.showWinner(currentPlayer);
-            } else {
-                endTurnAndSwitchPlayer();  // Valid move, but game continues
-            }
+            stopTimer();
+            gameView.showMessageAndPause("Nice move! Connected");
+            endTurnAndSwitchPlayer();
+            startTurn();
         } else {
-            gameView.showError("Invalid connection. Turn skipped.");
-            endTurnAndSwitchPlayer();  // Invalid move ends the turn
+            gameView.showMessageAndPause("Invalid connection. Try again.");
         }
     }
 
     private void endTurnAndSwitchPlayer() {
         gameState.switchPlayer();
         gameState.incrementRound();
-        gameView.displayGameState(gameState);
-        handleTurn();
     }
-
 }
-

@@ -4,12 +4,14 @@ public class Player {
     private String name;
     private int score;
     private List<Movie> moviesPlayed; // list of movies player has played
+    private WinConditionStrategy winCondition;
 
     // constructor. Initialize the player with their name
     public Player(String name) {
         this.name = name;
         this.score = 0;
         this.moviesPlayed = new ArrayList<>();
+        this.winCondition = null; // default not set
     }
 
     // Return player's name
@@ -35,9 +37,22 @@ public class Player {
         return moviesPlayed;
     }
 
+    // set wincondition
+    public void setWinCondition(WinConditionStrategy winCondition) {
+        this.winCondition = winCondition;
+    }
+
+    // get win condition
+    public WinConditionStrategy getWinCondition() {
+        return this.winCondition;
+    }
+
+
     // Check if this specifc player has won based on the win condition
-    public boolean hasWon(WinConditionStrategy winCondition) {
-        // Return true if the player satisfies the win condition
+    public boolean hasWon() {
+        if (winCondition == null) {
+            return false;
+        }
         return winCondition.isSatisfied(this);
     }
 

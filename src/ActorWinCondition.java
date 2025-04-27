@@ -22,7 +22,13 @@ public class ActorWinCondition implements WinConditionStrategy {
 
     @Override
     public String getConditionType() {
-        String pluralGrammar = (requiredCount > 1) ? "movies" : "movie"; 
-        return "Play " + requiredCount + " " + pluralGrammar + " with " + actor; 
+        return "Actor";
     }
+    public String getActor() {
+        return actor;
+    }
+    public int getRequiredCount() {
+        return requiredCount;
+    }
+
 }

@@ -1,149 +1,393 @@
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.screen.TerminalScreen;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameView {
-    private Scanner scanner;
+    private Screen screen;
+    private TextGraphics graphics;
 
-    // construct to initialize the scanner for user input
+    private int totalWidth;
+    private int halfWidth;
+    private int thirdWidth;
+
     public GameView() {
-        this.scanner = new Scanner(System.in);
+        try {
+            Terminal terminal = new DefaultTerminalFactory()
+                    .setInitialTerminalSize(new TerminalSize(120, 40))  // columns x rows
+                    .createTerminal();
+
+            screen = new TerminalScreen(terminal);
+            screen.startScreen();
+            graphics = screen.newTextGraphics();
+
+            TerminalSize size = screen.getTerminalSize();
+            this.totalWidth = size.getColumns();
+            this.halfWidth = totalWidth / 2;
+            this.thirdWidth = totalWidth / 3;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Show the start screen (show basic instruction of the game and instructions)
+    private void printString(int col, int row, String text) {
+        graphics.putString(col, row, text);
+        try {
+            screen.refresh();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void showMessageAndPause(String message) {
+        try {
+            graphics.putString(0, 24, "                                                        "); // Clear old
+            graphics.putString(0, 24, message); // Show message at row 15
+            screen.refresh();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearScreen() {
+        try {
+            screen.clear();
+            screen.refresh();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeScreen() {
+        try {
+            screen.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public KeyStroke pollInput() {
+        try {
+            return screen.pollInput();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // update what the user is typing
+    public void updatePlayerInput(String currentInput) {
+        // Overwrite the input line
+        printString(10, 27, "                                      "); // Clear old input
+        printString(10, 27, currentInput); // Print new input
+    }
+
+
+    public void showWinner(Player player) {
+        clearScreen();
+        printString(0, 0, "Congratulations, " + player.getName() + "!");
+        printString(0, 1, "You have won the game!");
+    }
+
+    // Helper: Print long text wrapped at maxWidth
+    private int printWrappedText(int startCol, int startRow, String label, String text, int maxWidth) {
+        String fullText = label + text;
+        int currentRow = startRow;
+        while (fullText.length() > maxWidth) {
+            printString(startCol, currentRow++, fullText.substring(0, maxWidth));
+            fullText = fullText.substring(maxWidth);
+        }
+        printString(startCol, currentRow++, fullText);
+        return currentRow; // Return the new row after printing
+    }
+
+    public void displayGameState(GameState gameState) {
+        clearScreen();
+
+        int padding = 2;
+        int round = gameState.getRound();
+
+        Player player1 = gameState.getPlayers().get(0);
+        Player player2 = gameState.getPlayers().get(1);
+
+        String separatorLine = "=".repeat(halfWidth) + "|" + "=".repeat(halfWidth);
+
+        // === Top Half: Players and Progress ===
+        printString(0, 0, separatorLine);
+
+        String player1Header = "Player 1";
+        String player2Header = "Player 2";
+        int player1StartCol = (halfWidth - player1Header.length()) / 2;
+        int player2StartCol = halfWidth + (halfWidth - player2Header.length()) / 2;
+
+        printString(player1StartCol, 1, player1Header);
+        printString(player2StartCol, 1, player2Header);
+
+        printString(0, 2, separatorLine);
+
+        // Player 1 Info (left side)
+        printString(padding, 4, player1.getName());
+        printString(padding, 5, "To Win: " + getWinConditionDescription(player1));
+        printString(padding, 6, "Progress: " + getProgress(player1));
+
+        // Player 2 Info (right side)
+        int player2Col = halfWidth + padding;
+        printString(player2Col, 4, player2.getName());
+        printString(player2Col, 5, "To Win: " + getWinConditionDescription(player2));
+        printString(player2Col, 6, "Progress: " + getProgress(player2));
+
+
+        // === Middle Section: Game Board Info ===
+        int y = 8;
+        printString(0, y, separatorLine);
+
+        String leftBoardHeader = "Game Board - Movie Info";
+        String rightBoardHeader = "Recent Connections";
+        int leftHeaderStart = (halfWidth - leftBoardHeader.length()) / 2;
+        int rightHeaderStart = halfWidth + (halfWidth - rightBoardHeader.length()) / 2;
+
+        printString(leftHeaderStart, y + 1, leftBoardHeader);
+        printString(rightHeaderStart, y + 1, rightBoardHeader);
+
+        printString(0, y + 2, separatorLine);
+
+        int leftCol = 0;
+        int rightCol = halfWidth + 2;
+        int leftY = y + 4;
+        int rightY = y + 4;
+
+        Player currentPlayer = gameState.getCurrentPlayer();
+        Movie currentMovie = gameState.getCurrentMovie();
+
+        // Left side - Movie Info
+        leftY = printWrappedText(leftCol + padding, leftY, "Current Movie: ", currentMovie.getTitle() + " (" + currentMovie.getReleaseYear() + ")", halfWidth - padding - 2);
+        leftY = printWrappedText(leftCol + padding, leftY, "Genres: ", String.join(", ", currentMovie.getGenres()), halfWidth - padding - 2);
+        leftY = printWrappedText(leftCol + padding, leftY, "Director: ", currentMovie.getDirector(), halfWidth - padding - 2);
+        leftY = printWrappedText(leftCol + padding, leftY, "Writer: ", currentMovie.getWriter(), halfWidth - padding - 2);
+        leftY = printWrappedText(leftCol + padding, leftY, "Cinematographer: ", currentMovie.getCinematographer(), halfWidth - padding - 2);
+        leftY = printWrappedText(leftCol + padding, leftY, "Composer: ", currentMovie.getComposer(), halfWidth - padding - 2);
+
+        // Limit actors to max 3 lines
+        List<String> actors = currentMovie.getActors();
+        String actorList = String.join(", ", actors);
+        int maxActorsWidth = halfWidth - padding - 2;
+        int actorLinesPrinted = 0;
+        int actorStart = 0;
+
+        while (actorStart < actorList.length() && actorLinesPrinted < 3) {
+            int end = Math.min(actorStart + maxActorsWidth, actorList.length());
+            printString(leftCol + padding, leftY++, (actorLinesPrinted == 0 ? "Actors: " : "       ") + actorList.substring(actorStart, end));
+            actorStart = end;
+            actorLinesPrinted++;
+        }
+        if (actorStart < actorList.length()) {
+            printString(leftCol + padding, leftY++, "..."); // indicate overflow
+        }
+
+        // Right side - Recent Connections
+        List<String> history = gameState.getRecentHistory();
+        if (history.isEmpty()) {
+            printString(rightCol + padding, rightY++, "(No connections yet)");
+        } else {
+            for (String entry : history) {
+                rightY = printWrappedText(rightCol + padding, rightY, "", entry, halfWidth - padding - 2);
+            }
+        }
+
+        // === Bottom Section: Typing Input and Timer ===
+        int bottomStartY = 22;
+        printString(0, bottomStartY, separatorLine);
+
+        // Timer (separate line, centered)
+        String timerInfo = ""; // (initial placeholder, later dynamically updated)
+        int timerCol = (totalWidth - timerInfo.length()) / 2;
+        printString(timerCol, bottomStartY + 1, timerInfo);
+
+        // Round info + Typing prompt together in one line
+        String roundInfo = "Round: " + round;
+        String typingPrompt = currentPlayer.getName() + ", make a guess...";
+        String spacer = "          "; // 10 spaces between
+        String combinedPromptLine = roundInfo + spacer + typingPrompt;
+        int combinedPromptCol = (totalWidth - combinedPromptLine.length()) / 2;
+        printString(combinedPromptCol, bottomStartY + 2, combinedPromptLine);
+    }
+
+
+    public void updateTimerOnly(int secondsRemaining) {
+        try {
+            String timerText = "Timer: " + secondsRemaining + "s";
+            int timerStartCol = (totalWidth - timerText.length()) / 2;
+            int timerRow = 22; //
+
+            // Clear old timer (overwrite with spaces)
+            graphics.putString(timerStartCol, timerRow, " ".repeat(timerText.length()));
+
+            // Write updated timer
+            graphics.putString(timerStartCol, timerRow, timerText);
+
+            screen.refresh();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getWinConditionDescription(Player player) {
+        WinConditionStrategy condition = player.getWinCondition();
+        if (condition instanceof GenreWinCondition) {
+            GenreWinCondition g = (GenreWinCondition) condition;
+            return "Find " + g.getRequiredCount() + " " + g.getGenre() + " movie";
+        } else if (condition instanceof ActorWinCondition) {
+            ActorWinCondition a = (ActorWinCondition) condition;
+            return "Find " + a.getRequiredCount() + " movie with " + a.getActor();
+        } else if (condition instanceof DirectorWinCondition) {
+            DirectorWinCondition d = (DirectorWinCondition) condition;
+            return "Find " + d.getRequiredCount() + " movie directed by " + d.getDirector();
+        } else {
+            return condition.getConditionType();
+        }
+    }
+
+    private String getProgress(Player player) {
+        WinConditionStrategy condition = player.getWinCondition();
+        if (condition instanceof GenreWinCondition) {
+            GenreWinCondition g = (GenreWinCondition) condition;
+            int count = 0;
+            for (Movie m : player.getMoviesPlayed()) {
+                if (m.getGenres().contains(g.getGenre())) count++;
+            }
+            return count + "/" + g.getRequiredCount();
+        } else if (condition instanceof ActorWinCondition) {
+            ActorWinCondition a = (ActorWinCondition) condition;
+            int count = 0;
+            for (Movie m : player.getMoviesPlayed()) {
+                if (m.getActors().contains(a.getActor())) count++;
+            }
+            return count + "/" + a.getRequiredCount();
+        } else if (condition instanceof DirectorWinCondition) {
+            DirectorWinCondition d = (DirectorWinCondition) condition;
+            int count = 0;
+            for (Movie m : player.getMoviesPlayed()) {
+                if (d.getDirector().equalsIgnoreCase(m.getDirector())) count++;
+            }
+            return count + "/" + d.getRequiredCount();
+        } else {
+            return "-";
+        }
+    }
+
+
+    // Original getPlayerInput still works (for player name and win condition setup)
+    private String getUserInput(int startCol, int startRow) {
+        StringBuilder input = new StringBuilder();
+        try {
+            KeyStroke keyStroke;
+            while (true) {
+                keyStroke = screen.readInput(); // blocking for name input only
+                switch (keyStroke.getKeyType()) {
+                    case Enter:
+                        return input.toString();
+                    case Character:
+                        input.append(keyStroke.getCharacter());
+                        printString(startCol, startRow, input.toString());
+                        break;
+                    case Backspace:
+                        if (input.length() > 0) {
+                            input.deleteCharAt(input.length() - 1);
+                            printString(startCol, startRow, input.toString() + " ");
+                            printString(startCol, startRow, input.toString());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public String[] getPlayerNames() {
-        System.out.println("Hey there, welcome to Group 20's Movie Name Game");
-        System.out.println("Please enter the names of the two players.");
+        clearScreen();
+        printString(0, 0, "Hey there, welcome to Group 20's Movie Name Game!");
+        printString(0, 2, "Please enter the names of the two players.");
 
-        // get player 1's name
-        System.out.print("Enter name for Player 1: ");
-        String player1Name = scanner.nextLine();
+        printString(0, 4, "Enter name for Player 1: ");
+        String player1Name = getUserInput(25, 4);
 
-        // get player 2's name
-        System.out.print("Enter name for Player 2: ");
-        String player2Name = scanner.nextLine();
+        printString(0, 6, "Enter name for Player 2: ");
+        String player2Name = getUserInput(25, 6);
 
-        // return both names as an array
-        return new String[] { player1Name, player2Name };
+        return new String[]{player1Name, player2Name};
     }
 
     public WinConditionStrategy getPlayersWinConditions(MovieDatabase movieDatabase) {
-        System.out.println("You have 3 win conditions to choose from! How would you like to beat your opponent?");
-        System.out.println("1. Genre");
-        System.out.println("2. Actor ");
-        System.out.println("3. Director");
+        clearScreen();
+        printString(0, 0, "You have 3 win conditions to choose from:");
+        printString(0, 2, "1. Genre");
+        printString(0, 3, "2. Actor");
+        printString(0, 4, "3. Director");
+        printString(0, 6, "Enter choice (1-3): ");
 
-        int winConditionChoice = scanner.nextInt(); // may need more validation for user input
+        String choiceInput = getUserInput(20, 6);
+        int winConditionChoice;
+        try {
+            winConditionChoice = Integer.parseInt(choiceInput);
+        } catch (NumberFormatException e) {
+            winConditionChoice = 1; // default to Genre
+        }
 
-        scanner.nextLine(); // move to nextLine
+        printString(0, 8, "Difficulty? (easy, medium, hard): ");
+        String difficulty = getUserInput(35, 8).toLowerCase().trim();
 
-        // OPTIONAL IMPLEMENTATION: Choosing 3 difference levels of difficulties
-        System.out.println("How difficult do you want to make the Battle?! (easy, medium, hard)");
-        
-        // clean user input 
-        // needs more validation
-        String difficulty = scanner.nextLine().toLowerCase().trim();
-
-        int count; // sets the count for the WinCondition!
-
-        // Implement difficulty levels as switch conditions
+        int count;
         switch (difficulty) {
-            case "easy":
-                count = 3;
-                break;
-            case "hard":
-                count = 7;
-                break;
-            default:
-                count = 5;
+            case "easy": count = 3; break;
+            case "hard": count = 7; break;
+            default: count = 5;
         }
 
-        // Switch conditions for winConditionChoice
+        WinConditionStrategy winCondition;
+
         switch (winConditionChoice) {
-            case 1: { // genre based
-                // cast list to set to index
-                List<String> genreList = new ArrayList<>(movieDatabase.getAllGenres());
-                int genreGenerator = ThreadLocalRandom.current().nextInt(genreList.size());
-                String randomGenre = genreList.get(genreGenerator);
-
-                System.out.println("You need to find " + count + " Movies with the Genre: " + randomGenre);
-                
-                // Initialises GenreWinCondition for Player!
-                return new GenreWinCondition(randomGenre, count);  
-            }  
-
+            case 1: {
+                List<String> genres = new ArrayList<>(movieDatabase.getAllGenres());
+                String randomGenre = genres.get(ThreadLocalRandom.current().nextInt(genres.size()));
+                winCondition = new GenreWinCondition(randomGenre, count);
+                break;
+            }
             case 2: {
-                // cast list to set to index
-                List<String> actorsList = new ArrayList<>(movieDatabase.getAllActors());
-                int actorGenerator = ThreadLocalRandom.current().nextInt(actorsList.size());
-                String randomActor = actorsList.get(actorGenerator);
-
-                System.out.println("You need to find " + count + " Movies with the Actor: " + randomActor);
-                
-                // Initialises ActorWinCondition for Player!
-                return new ActorWinCondition(randomActor, count);  
+                List<String> actors = new ArrayList<>(movieDatabase.getAllActors());
+                String randomActor = actors.get(ThreadLocalRandom.current().nextInt(actors.size()));
+                winCondition = new ActorWinCondition(randomActor, count);
+                break;
             }
-
             case 3: {
-                // cast list to set to index
-                List<String> directorList = new ArrayList<>(movieDatabase.getAllDirectors());
-                int directorGenerator = ThreadLocalRandom.current().nextInt(directorList.size());
-                String randomDirector = directorList.get(directorGenerator);
-
-                System.out.println("You need to find " + count + " Movies with the Director: " + randomDirector);
-                
-                // Initialises DirectorWinCondition for Player!
-                return new DirectorWinCondition(randomDirector, count);  
+                List<String> directors = new ArrayList<>(movieDatabase.getAllDirectors());
+                String randomDirector = directors.get(ThreadLocalRandom.current().nextInt(directors.size()));
+                winCondition = new DirectorWinCondition(randomDirector, count);
+                break;
             }
-
-            // default example in case of issues
             default: {
-                System.out.println("Invalid input...Defaulting to genre 'Action'");
-                return new GenreWinCondition("Action", count);
+                winCondition = new GenreWinCondition("Action", count);
+                break;
             }
-              
         }
+
+        return winCondition;
     }
 
-    // Display current game state to the user
-    public void displayGameState(GameState gameState) {
-        Player currentPlayer = gameState.getCurrentPlayer();
-        Movie currentMovie = gameState.getCurrentMovie();
-        int round = gameState.getRound();
-        System.out.println("\n--- Game State ---");
-        System.out.println("Round: " + round);
-        System.out.println("Current Player: " + currentPlayer.getName());
-        System.out.println("Current Movie: " + currentMovie.getTitle());
-        System.out.println("Movies Played: " + gameState.getPlayedMovies());
-        System.out.println("Score: " + currentPlayer.getScore());
-        System.out.println("-------------------");
-        System.out.print(currentPlayer.getName() + ", enter movie title: ");
-    }
 
-    // Ask user for movie name input
-    public String getPlayerInput(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine(); // read and return user's input
-    }
 
-    // Show any error messages (like invalid movie, wrong connection, etc.)
-    public void showError(String message) {
-        System.out.println("\nError: " + message);
-    }
-
-    // Show the winner (called when someone meets the win condition)
-    public void showWinner(Player player) {
-        System.out.println("\nCongratulations, " + player.getName() + "!");
-        System.out.println("You have won the game!");
-    }
-
-    // Display time left on screen (could be seconds or countdown)
-    public void showTimer(int secondsRemaining) {
-        System.out.println("Time remaining: " + secondsRemaining + " seconds");
-    }
-
-    public void showMessage(String message) {
-        System.out.println(message);
-    }
 }

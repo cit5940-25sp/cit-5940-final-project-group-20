@@ -7,8 +7,8 @@ public class GameState {
     private Set<Movie> playedMovies; // set to track all played moview
     private int round; // how many rounds have we gone (current round number)
     private Map<String, Integer> connectionUsageCount; // connection usage count for each type (actor, director etc)
-    private Map<Player, WinConditionStrategy> playerWinConditions; // Individual WinConditions for each player!
     private boolean isGameOver; // check if the game is over
+    private List<String> connectionHistory; // track last few moves
 
     // construct and initialize
     public GameState() {
@@ -18,7 +18,6 @@ public class GameState {
         this.playedMovies = new HashSet<>(); // can't play movies that's been already played
         this.round = 1; // start from round 1
         this.connectionUsageCount = new HashMap<>();
-        this.playerWinConditions = new HashMap<>();
         this.isGameOver = false;
     }
 
@@ -30,6 +29,7 @@ public class GameState {
         this.round = 1; // start from round 1
         this.connectionUsageCount.clear(); // clear connection usage count
         this.isGameOver = false; // initially gameOver is false
+        this.connectionHistory = new ArrayList<>();
     }
 
     // get current player
@@ -75,10 +75,25 @@ public class GameState {
 
     // update the game state with next movie and connection type used
     public void updateState(Movie nextMovie, String connectionType) {
-        addPlayedMovie(currentMovie); // add current movie to played movies
+
+        if (currentMovie != null && nextMovie != null) {
+            String entry = currentMovie.getTitle() +
+                     " → " + nextMovie.getTitle() +
+                     " [" + connectionType + "]";
+            connectionHistory.add(entry);
+
+            // Keep only the most recent 5 entries
+            if (connectionHistory.size() > 5) {
+                connectionHistory.remove(0);
+            }
+        }
         currentMovie = nextMovie;
         incrementRound();
         incrementConnectionUsage(connectionType);
+    }
+
+    public List<String> getRecentHistory() {
+        return new ArrayList<>(connectionHistory);
     }
 
     // How many times has this connection type been used?
@@ -93,29 +108,11 @@ public class GameState {
 
     // check if a player has won based on the win condition
     public boolean hasPlayerWon(Player player) {
-        // extracts win condition of given player
-        WinConditionStrategy winCon = playerWinConditions.get(player);
-        
-        if (winCon != null) {
-            return winCon.isSatisfied(player); 
-        }
-
-        return false;
+        return player.hasWon(); // player knows its own win conditino
     }
 
-    // Set the win condition strategy
-    public void setWinConditionPlayer(Player player, WinConditionStrategy winCondition) {
-        if (!players.contains(player)) {    // check player is initialised correctly
-            players.add(player);
-        }
-        // update hashmap to reflect player + individual win condition
-        playerWinConditions.put(player, winCondition);
-        
-    }
-
-    // Wincondition getter method 
-    public WinConditionStrategy getWinConditionPlayer(Player player) {
-        return playerWinConditions.get(player);
+    public List<Player> getPlayers() {
+        return players;
     }
 
 
@@ -126,9 +123,8 @@ public class GameState {
 
     // Get the winner of the game
     public Player getWinner() {
-        // In a real implementation, we should check all players to see who satisfies the win condition
         for (Player player : players) {
-            if (hasPlayerWon(player)) {
+            if (player.hasWon()) {
                 return player;
             }
         }

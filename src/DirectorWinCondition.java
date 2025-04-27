@@ -21,7 +21,14 @@ public class DirectorWinCondition implements WinConditionStrategy {
 
     @Override
     public String getConditionType() {
-        String pluralGrammar = (requiredCount > 1) ? "movies" : "movie"; 
-        return "Play " + requiredCount + " " + pluralGrammar + " directed by " + director;
+        return "Director";
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public int getRequiredCount() {
+        return requiredCount;
     }
 }
