@@ -28,6 +28,18 @@ public class Movie {
         return title;
     }
 
+    //clean and remove title for autocomplete
+    public String getSearchableTitle(){
+        String searchableTitle = new String(this.title);
+        if(searchableTitle.toLowerCase().startsWith("the ")){
+            searchableTitle = searchableTitle.substring(4);
+        }
+        if(searchableTitle.toLowerCase().startsWith("a ")){
+            searchableTitle = searchableTitle.substring(2);
+        }
+        return searchableTitle;
+    }
+
     public int getReleaseYear() {
         return releaseYear;
     }

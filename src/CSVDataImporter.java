@@ -1,4 +1,5 @@
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +19,11 @@ public class CSVDataImporter implements IDataImporter {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             String[] header;
             try {
-                header = reader.readNext();
+                try {
+                    header = reader.readNext();
+                } catch (CsvValidationException e) {
+                    throw new RuntimeException(e);
+                }
                 if (header != null) {
                     System.out.println("\nHeader: " + String.join(", ", header));
                 }
@@ -33,7 +38,11 @@ public class CSVDataImporter implements IDataImporter {
 
             while (true) {
                 try {
-                    nextLine = reader.readNext();
+                    try {
+                        nextLine = reader.readNext();
+                    } catch (CsvValidationException e) {
+                        throw new RuntimeException(e);
+                    }
                     if (nextLine == null) break;
                 } catch (IOException e) {
                     System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
@@ -51,6 +60,7 @@ public class CSVDataImporter implements IDataImporter {
                     rowNumber++;
                     continue;
                 }
+
 
                 String title = nextLine[17];
                 String releasedate = nextLine[11];
@@ -75,10 +85,10 @@ public class CSVDataImporter implements IDataImporter {
                 List<String> genres = new ArrayList<>();
                 for (int i = 0; i < genrearray.length(); i++) {
                     String genrename = ((JSONObject) genrearray.get(i)).getString("name");
-                    genres.add(genrename);
+                    genres.add(DataCleaner.clean(genrename));
                 }
 
-                Movie movie = new Movie(title, releaseYear, null, null, null, null, null, genres);
+                Movie movie = new Movie(DataCleaner.clean(title), releaseYear, null, null, null, null, null, genres);
                 hash.put(id, movie);
                 rowNumber++;
             }
@@ -98,7 +108,11 @@ public class CSVDataImporter implements IDataImporter {
             // Read and print the header
             String[] header;
             try {
-                header = reader.readNext();
+                try {
+                    header = reader.readNext();
+                } catch (CsvValidationException e) {
+                    throw new RuntimeException(e);
+                }
                 if (header != null) {
                     System.out.println("\nHeader: " + String.join(", ", header));
                 }
@@ -114,7 +128,12 @@ public class CSVDataImporter implements IDataImporter {
     
             while (true) {
                 try {
-                    nextLine = reader.readNext();
+                    try {
+                        nextLine = reader.readNext();
+                    } catch (CsvValidationException e) {
+                        //right now skipping if error is being thrown
+                        continue;
+                    }
                     if (nextLine == null) break;
                 } catch (IOException e) {
                     System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
@@ -149,6 +168,8 @@ public class CSVDataImporter implements IDataImporter {
     
                 for (int i = 0; i < castarray.length(); i++) {
                     String castname = ((JSONObject) castarray.get(i)).getString("name");
+                    //cleaning
+                    castname = DataCleaner.clean(castname);
                     actors.add(castname);
                 }
     
@@ -168,8 +189,8 @@ public class CSVDataImporter implements IDataImporter {
                 String composer = null;
     
                 for (int i = 0; i < crewarray.length(); i++) {
-                    String crewname = ((JSONObject) crewarray.get(i)).getString("name");
-                    String crewjob = ((JSONObject) crewarray.get(i)).getString("job");
+                    String crewname = DataCleaner.clean(((JSONObject) crewarray.get(i)).getString("name"));
+                    String crewjob = DataCleaner.clean(((JSONObject) crewarray.get(i)).getString("job"));
                     if (crewjob.equalsIgnoreCase("director")) {
                         director = crewname;
                         continue;

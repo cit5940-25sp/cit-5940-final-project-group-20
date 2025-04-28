@@ -24,4 +24,9 @@ public class CSVDataImporterTest {
         //assertEquals("", t.getReleaseYear());
     }
 
+    @org.junit.Test
+    public void TestDataCleaner() {
+        assertEquals("Renee Zellweger", DataCleaner.clean("Renu00e9e Zellweger"));
+    }
+
 }
