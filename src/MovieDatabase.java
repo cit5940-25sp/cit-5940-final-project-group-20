@@ -19,8 +19,10 @@ public class MovieDatabase {
         // here I am adding some movies to mock testing
         this.movies = new HashMap<>();
 
+        //AUTOCOMPLETE CHANGE - Frida
 
         CSVDataImporter importer = new CSVDataImporter();
+        //pass map into autocomplete after importing
         Map<Integer, Movie> imported = importer.importDataMovie("tmdb_5000_movies.csv");
         imported = importer.importDataCredit("tmdb_5000_credits.csv", imported);
 
@@ -59,6 +61,8 @@ public class MovieDatabase {
     public Movie getMovieByTitle(String title) {
         return movies.get(title);
     }
+
+    //AUTOCOMPLETE CHANGE- Frida
 
     // Give movie title suggestions based on what the user types
     public List<String> searchSuggestions(String prefix) {
