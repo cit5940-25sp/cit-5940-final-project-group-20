@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Autocomplete implements IAutocomplete {
@@ -13,7 +14,7 @@ public class Autocomplete implements IAutocomplete {
     }
 
     @Override
-    public void addWord(String word, long weight) {
+    public void addWord(String word, Movie movie) {
         //checking if word is valid -> letters only
         if (!this.validChars(word)) {
             return;
@@ -23,7 +24,8 @@ public class Autocomplete implements IAutocomplete {
         currentnode.setPrefixes((currentnode.getPrefixes() + 1));
         for (int i = 0; i < word.length(); i++) {
             char currentchar = word.charAt(i);
-            int referenceindex = currentchar - 'a';
+            //need to be able to match lower and upper case harry
+            int referenceindex = currentchar;
             // if no reference, create node
             if (currentnode.getReferences()[referenceindex] == null) {
                 currentnode.getReferences()[referenceindex] = new Node();
@@ -31,12 +33,12 @@ public class Autocomplete implements IAutocomplete {
             //last letter in word
             if (i == word.length() - 1) {
                 if (currentnode.getReferences()[referenceindex] == null) {
-                    Node completeword = new Node(word, weight);
+                    Node completeword = new Node(word, movie);
                     completeword.setWords(1);
                     currentnode.getReferences()[referenceindex] = completeword;
                 } else {
                     currentnode.getReferences()[referenceindex].setWords(1);
-                    Term t = new Term(word, weight);
+                    Term t = new Term(word, movie);
                     currentnode.getReferences()[referenceindex].setTerm(t);
                 }
             }
@@ -54,7 +56,9 @@ public class Autocomplete implements IAutocomplete {
 
     public boolean validChars(String word) {
         for (int i = 0; i < word.length(); i++) {
-            if (word.charAt(i) > 122 || word.charAt(i) < 97) {
+            //ASCII
+            if (word.charAt(i) > 256 || word.charAt(i) < 0) {
+                System.err.println("unexpected char " + word.charAt(i));
                 return false;
             }
         }
@@ -62,42 +66,13 @@ public class Autocomplete implements IAutocomplete {
     }
 
     @Override
-    public Node buildTrie(String filename, int k) {
-        FileReader fileReader;
-        try {
-            fileReader = new FileReader(filename);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        //buffered reader to read from file
-        BufferedReader buff = new BufferedReader(fileReader);
-        while (true) {
-            //reading next line in file
-            String line;
-            try {
-                line = buff.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            //checking if at the end of file
-            if (line == null) {
-                break;
-            }
-            //trim the white space in front and after string
-            line = line.trim();
-            line = line.toLowerCase();
-            //splitting the line into 2 by single white space
-            String[] parts = line.split("\\s+");
-            //expect line to have 2 strings
-            if (parts.length != 2) {
+    public Node buildTrie(Collection<Movie> movies) {
+
+        for(Movie m : movies){
+            if (m == null) {
                 continue;
             }
-            //convert and use addWord
-            long weight = Long.parseLong(parts[0]);
-            String word = parts[1];
-            word = word.toLowerCase();
-            addWord(word, weight);
-
+            addWord(m.getSearchableTitle(), m);
         }
         return this.root;
     }
@@ -108,8 +83,8 @@ public class Autocomplete implements IAutocomplete {
         //prefix = prefix.toLowerCase();
         for (int i = 0; i < prefix.length(); i++) {
             char c = prefix.charAt(i);
-            int referenceindex = c - 'a';
-            if (referenceindex < 0 || referenceindex > 25) {
+            int referenceindex = c;
+            if (referenceindex < 0 || referenceindex > 256) {
                 return null;
             }
             if (currentnode.getReferences()[referenceindex] == null) {
@@ -122,18 +97,6 @@ public class Autocomplete implements IAutocomplete {
 
     @Override
     public int countPrefixes(String prefix) {
-        /*Node currentnode = root;
-        for(int i = 0; i < prefix.length(); i++){
-            char c = prefix.charAt(i);
-            int referenceindex = c - 'a';
-            if(referenceindex < 0 || referenceindex > 25){
-                return 0;
-            }
-            if(currentnode.getReferences()[referenceindex] == null){
-                return 0;
-            }
-            currentnode = currentnode.getReferences()[referenceindex];
-        }*/
         if (getSubTrie(prefix) == null) {
             return 0;
         }

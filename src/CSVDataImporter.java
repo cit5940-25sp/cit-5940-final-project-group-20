@@ -1,4 +1,5 @@
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvMalformedLineException;
 import com.opencsv.exceptions.CsvValidationException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,10 +102,9 @@ public class CSVDataImporter implements IDataImporter {
     }
 
 
-
     public Map<Integer, Movie> importDataCredit(String file, Map<Integer, Movie> movies) {
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
-    
+
             // Read and print the header
             String[] header;
             try {
@@ -121,11 +121,11 @@ public class CSVDataImporter implements IDataImporter {
                 e.printStackTrace();
                 return movies;
             }
-    
+
             // Read and print each line
             String[] nextLine;
             int rowNumber = 1;
-    
+
             while (true) {
                 try {
                     try {
@@ -133,7 +133,11 @@ public class CSVDataImporter implements IDataImporter {
                     } catch (CsvValidationException e) {
                         //right now skipping if error is being thrown
                         continue;
+                    } catch (CsvMalformedLineException e) {
+                        //right now skipping if error is being thrown
+                        continue;
                     }
+
                     if (nextLine == null) break;
                 } catch (IOException e) {
                     System.err.println("CSV validation error while reading row " + rowNumber + ": " + e.getMessage());
@@ -141,7 +145,7 @@ public class CSVDataImporter implements IDataImporter {
                     rowNumber++;
                     continue;
                 }
-    
+
                 int id = Integer.parseInt(nextLine[0]);
                 try {
                     id = Integer.parseInt(nextLine[0]);
@@ -149,7 +153,7 @@ public class CSVDataImporter implements IDataImporter {
                     System.err.println("Skipping credit row " + rowNumber + " due to invalid ID: " + nextLine[0]);
                     continue;
                 }
-    
+
                 if (!movies.containsKey(id)) {
                     System.err.println("Skipping credit row " + rowNumber + " - Movie ID " + id + " not found in movie map.");
                     continue;
@@ -163,16 +167,16 @@ public class CSVDataImporter implements IDataImporter {
                     movies.remove(id);
                     continue;
                 }
-    
+
                 List<String> actors = new ArrayList<>();
-    
+
                 for (int i = 0; i < castarray.length(); i++) {
                     String castname = ((JSONObject) castarray.get(i)).getString("name");
                     //cleaning
                     castname = DataCleaner.clean(castname);
                     actors.add(castname);
                 }
-    
+
                 String crewjson = nextLine[3];
                 JSONArray crewarray;
                 try {
@@ -187,7 +191,7 @@ public class CSVDataImporter implements IDataImporter {
                 String writer = null;
                 String cinematographer = null;
                 String composer = null;
-    
+
                 for (int i = 0; i < crewarray.length(); i++) {
                     String crewname = DataCleaner.clean(((JSONObject) crewarray.get(i)).getString("name"));
                     String crewjob = DataCleaner.clean(((JSONObject) crewarray.get(i)).getString("job"));
@@ -213,17 +217,16 @@ public class CSVDataImporter implements IDataImporter {
                 movies.get(id).setWriter(writer);
                 movies.get(id).setCinematographer(cinematographer);
                 movies.get(id).setComposer(composer);
-    
+
                 rowNumber++;
             }
-    
+
         } catch (IOException e) {
             System.err.println("Error reading the CSV file: " + e.getMessage());
             e.printStackTrace();
         }
         return movies;
     }
-    
 
 
     private boolean hasHeader() {

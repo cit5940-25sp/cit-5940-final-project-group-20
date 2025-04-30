@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,24 +12,21 @@ public interface IAutocomplete
      * If the word contains an invalid character, simply do nothing.
      *
      * @param word the word to be added to the Trie
-     * @param weight the weight of the word
+     * @param movie the movie that word belongs to
      */
-    public void addWord(String word, long weight);
+    public void addWord(String word, Movie movie);
 
 
 
     /**
      * Initializes the Trie
      *
-     * @param filename the file to read all the autocomplete data from each line
-     *                 contains a word and its weight This method will call the
-     *                 addWord method
-     * @param k the maximum number of suggestions that should be displayed
+     * @param movies Collection of movies - all the movies we want to be able to autocomplete for
      * @return the root of the Trie You might find the readLine() method in
      *         BufferedReader useful in this situation as it will allow you to
      *         read a file one line at a time.
      */
-    public Node buildTrie(String filename, int k);
+    public Node buildTrie(Collection<Movie> movies);
 
 
     /**

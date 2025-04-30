@@ -5,22 +5,16 @@ public class Node {
     private int prefixes;
     private Node[] references;
 
-    /**
-     * Initialize a Node with an empty string and 0 weight; useful for
-     * writing tests.
-     */
+
     public Node() {
-        this.term = new Term("", 0);
-        this.references = new Node[26];
+        //ASCII
+        this.references = new Node[256];
     }
 
-    /**
-     * Initialize a Node with the given query string and weight.
-     * @throws IllegalArgumentException if query is null or if weight is negative.
-     */
-    public Node(String query, long weight) {
-        this.term = new Term(query, weight);
-        this.references = new Node[26];
+
+    public Node(String query, Movie movie) {
+        this.term = new Term(query, movie);
+        this.references = new Node[256];
     }
 
     public Term getTerm() {
@@ -55,7 +49,7 @@ public class Node {
         this.references = references;
     }
     public Term createCopyTerm() {
-        Term tnew = new Term(this.term.getTerm(), this.term.getWeight());
+        Term tnew = new Term(this.term.getTerm(), this.term.getMovie());
         return tnew;
     }
 }
