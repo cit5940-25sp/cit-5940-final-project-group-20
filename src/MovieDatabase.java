@@ -144,4 +144,49 @@ public class MovieDatabase {
         return eligibleDirectors;
     }
 
+    // Helper Method that will initialise first movie!
+    public Movie getValidStartingMovie(List<ConnectionStrategy> strategies) {
+        
+        List<Movie> allMovies = new ArrayList<>(getAllMovies());
+        
+        Collections.shuffle(allMovies); // randomises the order of the movies!
+    
+        for (Movie movie : allMovies) {
+            
+            if (movie == null) {
+                continue;
+            }
+            
+            if (movie.getTitle() == null || movie.getTitle().isEmpty()) {
+                continue;
+            }
+
+            if (movie.getActors() == null || movie.getActors().isEmpty()) {
+                continue;
+            }
+
+            if (movie.getDirector() == null || movie.getDirector().equals("null")) {
+                continue;
+            }
+    
+            for (Movie other : getAllMovies()) {
+                
+                if (other == null || other == movie) {
+                    continue;
+                }
+    
+                for (ConnectionStrategy strategy : strategies) {
+
+                    if (strategy.areConnected(movie, other)) {
+
+                        return movie; // Movie that is connected!! 
+                    }
+                }
+            }
+        }
+    
+        return null; // Just in case
+    }
+    
+
 }

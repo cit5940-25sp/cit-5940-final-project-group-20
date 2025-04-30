@@ -1,26 +1,39 @@
 import java.util.Arrays;
 import java.util.List;
 
+
 public class MovieNameGame {
     public static void main(String[] args) {
-        // create instances of components to run game
-        GameView gameView = new GameView();
-        GameState gameState = new GameState();
-        MovieDatabase movieDatabase = new MovieDatabase(); // this is not populated with movie database yet
-        List<ConnectionStrategy> connectionStrategies = Arrays.asList(
-            new ActorConnection(),
-            new DirectorConnection(),
-            new WriterConnection(),
-            new ComposerConnection(),
-            new CinematographerConnection(),
-            new GenreConnection()
-        );
+        GameView view = new GameView();
+        try {
+            boolean playAgain;
+            do {
+                try {
+                    GameState gameState = new GameState();
+                    MovieDatabase movieDatabase = new MovieDatabase();
+                    List<ConnectionStrategy> connectionStrategies = Arrays.asList(
+                        new ActorConnection(),
+                        new DirectorConnection(),
+                        new WriterConnection(),
+                        new ComposerConnection(),
+                        new CinematographerConnection(),
+                        new GenreConnection()
+                    );
 
-        // create the game controller instance
-        GameController gameController = new GameController(
-                gameState, gameView, movieDatabase, connectionStrategies);
+                    GameController gameController = new GameController(
+                            gameState, view, movieDatabase, connectionStrategies);
 
-        // start the game
-        gameController.startGame();
+                    gameController.startGame();
+                } catch (Exception e) {
+                    e.printStackTrace();  // if error
+                    break; // Exit the loop so we don't restart in a broken state
+                }
+
+                playAgain = view.promptRestart();
+            } while (playAgain);
+        } finally {
+            view.closeScreen();  // restores terminal
+        }
     }
 }
+

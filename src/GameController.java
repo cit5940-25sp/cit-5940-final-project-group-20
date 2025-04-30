@@ -38,7 +38,13 @@ public class GameController {
         player1.setWinCondition(gameView.getPlayersWinConditions(movieDatabase));
         player2.setWinCondition(gameView.getPlayersWinConditions(movieDatabase));
 
-        Movie startingMovie = movieDatabase.getMovieByTitle("Die Hard");
+        Movie startingMovie = movieDatabase.getValidStartingMovie(connectionStrategies);
+        
+        // shouldnt ever occur but just in case
+        if (startingMovie == null) {
+            gameView.showMessageAndPause("There is no valid starting movie");
+            return;
+        }
 
         gameState.initializeGame(players, startingMovie);
         // whichever the initial movie is set, it should be added to playedmovies
@@ -134,18 +140,24 @@ public class GameController {
         }, 1, 1, TimeUnit.SECONDS);
     }
 
+    // Terminates Game once time is up! 
     private void timeout() {
         stopTimer();
         timeoutOccurred = true;
         turnActive = false;
 
         try {
-            gameView.showMessageAndPause("Time is up! Switching player...");
+            Player loser = gameState.getCurrentPlayer();    // selects current player to become the loser!
+            List<Player> players = gameState.getPlayers();
+            Player winner = (players.get(0) == loser) ? players.get(1) : players.get(0);
+            gameState.setGameOver(true);
+            gameView.showWinner(winner);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    
     private void stopTimer() {
         turnActive = false;
         if (timerTask != null && !timerTask.isDone()) {

@@ -60,7 +60,8 @@ public class GameView {
         }
     }
 
-    private void clearScreen() {
+    // changed to public!
+    public void clearScreen() {
         try {
             screen.clear();
             screen.refresh();
@@ -180,6 +181,11 @@ public class GameView {
 
         // Limit actors to max 3 lines
         List<String> actors = currentMovie.getActors();
+        
+        if (actors == null) {
+            actors = new ArrayList<>(); // PREVENTING CRASH IF POINTING TO NULL!!
+        }
+
         String actorList = String.join(", ", actors);
         int maxActorsWidth = halfWidth - padding - 2;
         int actorLinesPrinted = 0;
@@ -246,13 +252,13 @@ public class GameView {
         WinConditionStrategy condition = player.getWinCondition();
         if (condition instanceof GenreWinCondition) {
             GenreWinCondition g = (GenreWinCondition) condition;
-            return "Find " + g.getRequiredCount() + " " + g.getGenre() + " movie";
+            return "Find " + g.getRequiredCount() + " " + g.getGenre() + " movies";
         } else if (condition instanceof ActorWinCondition) {
             ActorWinCondition a = (ActorWinCondition) condition;
-            return "Find " + a.getRequiredCount() + " movie with " + a.getActor();
+            return "Find " + a.getRequiredCount() + " movies with " + a.getActor();
         } else if (condition instanceof DirectorWinCondition) {
             DirectorWinCondition d = (DirectorWinCondition) condition;
-            return "Find " + d.getRequiredCount() + " movie directed by " + d.getDirector();
+            return "Find " + d.getRequiredCount() + " movies directed by " + d.getDirector();
         } else {
             return condition.getConditionType();
         }
@@ -340,17 +346,34 @@ public class GameView {
         printString(0, 4, "3. Director");
         printString(0, 6, "Enter choice (1-3): ");
 
-        String choiceInput = getUserInput(20, 6);
-        int winConditionChoice;
-        try {
-            winConditionChoice = Integer.parseInt(choiceInput);
-        } catch (NumberFormatException e) {
-            winConditionChoice = 1; // default to Genre
+        int winConditionChoice = 0;
+        int choiceRow = 6;
+        while (true) {
+            printString(0, choiceRow, "Enter choice (1-3):                     ");
+            String choiceInput = getUserInput(20, choiceRow);
+            try {
+                winConditionChoice = Integer.parseInt(choiceInput);
+                if (winConditionChoice >= 1 && winConditionChoice <= 3) {
+                    break;
+                }
+            } catch (NumberFormatException ignored) {}
+
+            choiceRow += 2;
+            printString(0, choiceRow, "Invalid input. Please enter 1, 2, or 3.");
         }
 
-        printString(0, 8, "Difficulty? (easy, medium, hard): ");
-        String difficulty = getUserInput(35, 8).toLowerCase().trim();
-
+    
+        int difficultyRow = choiceRow + 3;
+        String difficulty = "";
+        while (true) {
+            printString(0, difficultyRow, "Difficulty? (easy, medium, hard):                     ");
+            difficulty = getUserInput(35, difficultyRow).toLowerCase().trim();
+            if (difficulty.equals("easy") || difficulty.equals("medium") || difficulty.equals("hard")) {
+                break;
+            }
+            difficultyRow += 2;
+            printString(0, difficultyRow, "Invalid input. Please choose again easy, medium, or hard.");
+        }
         int count;
         switch (difficulty) {
             case "easy": count = 3; break;
@@ -387,6 +410,25 @@ public class GameView {
 
         return winCondition;
     }
+
+    // New function to initiate new Game instead of frozen terminal
+    public boolean promptRestart() {
+        printString(0, 20, "Would you like to Play again? (y/n): ");
+        try {
+            while (true) {
+                KeyStroke key = screen.readInput(); // blocking
+                if (key.getKeyType() == KeyType.Character) {
+                    char c = key.getCharacter();
+                    if (c == 'y' || c == 'Y') return true;
+                    if (c == 'n' || c == 'N') return false;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 
 
 
