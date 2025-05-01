@@ -11,7 +11,8 @@ import java.io.IOException;
 
 public class MovieDatabase {
     private Map<String, Movie> movies;
-    private AutoCompleteIndex autocomplete;
+    //changed to my autocomplete class
+    private Autocomplete autocomplete;
 
 
     // Trying to import Frida's CSVImporter to create movie database out of CSV file
@@ -19,18 +20,20 @@ public class MovieDatabase {
         // here I am adding some movies to mock testing
         this.movies = new HashMap<>();
 
-        //AUTOCOMPLETE CHANGE - Frida
+
 
         CSVDataImporter importer = new CSVDataImporter();
         //pass map into autocomplete after importing
         Map<Integer, Movie> imported = importer.importDataMovie("tmdb_5000_movies.csv");
         imported = importer.importDataCredit("tmdb_5000_credits.csv", imported);
+        this.autocomplete = new Autocomplete();
 
 
 
         // Populate internal Map<String, Movie> using movie titles as keys
         for (Movie movie : imported.values()) {
             movies.put(movie.getTitle(), movie);
+            autocomplete.addWord(movie.getSearchableTitle(), movie);
         }
 
         // Write all movie info to MovieDatabase.txt this
@@ -45,6 +48,7 @@ public class MovieDatabase {
                 writer.write("Composer: " + movie.getComposer() + "\n");
                 writer.write("Genres: " + movie.getGenres() + "\n");
                 writer.write("--------------------------------------------------\n");
+
             }
             System.out.println("Movie information written to output.txt");
         } catch (IOException e) {
@@ -65,9 +69,13 @@ public class MovieDatabase {
     //AUTOCOMPLETE CHANGE- Frida
 
     // Give movie title suggestions based on what the user types
-    public List<String> searchSuggestions(String prefix) {
-        List<String> placeholder = new ArrayList<>();
-        return placeholder;
+    public List<Movie> searchSuggestions(String prefix) {
+        List<ITerm> suggestions = autocomplete.getSuggestions(prefix);
+        List<Movie> movies = new ArrayList<>();
+        for(ITerm s : suggestions){
+            movies.add(s.getMovie());
+        }
+        return movies;
     }
 
     // Return movies connected to a given movie with a certain type of connection
