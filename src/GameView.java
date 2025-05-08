@@ -136,8 +136,16 @@ public class GameView {
      */
     public void showWinner(Player player) {
         clearScreen();
-        printString(0, 0, "Congratulations, " + player.getName() + "!");
-        printString(0, 1, "You have won the game!");
+
+        printString(4, 2,  "╔══════════════════════════════════════════════════════╗");
+        printString(4, 3,  "║                  CONGRATULATIONS!                    ║");
+        printString(4, 4,  "╚══════════════════════════════════════════════════════╝");
+
+        String nameLine = "Winner: " + player.getName().toUpperCase();
+        printString(10, 6, nameLine);
+
+        printString(10, 8, "You have won the Movie Name Game.");
+        printString(10, 10, "Thanks for playing!");
     }
 
     /**
