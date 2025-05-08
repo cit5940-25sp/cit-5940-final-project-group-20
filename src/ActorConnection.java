@@ -2,7 +2,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Implements a connection strategy based on shared actors between two movies.
+ * Two movies are considered connected if they share at least one actor.
+ */
 public class ActorConnection implements ConnectionStrategy {
+    /**
+     * Determines whether two movies are connected by a shared actor.
+     * Returns true if there is at least one actor who appears in both movies.
+     *
+     * @param a the first movie
+     * @param b the second movie
+     * @return {@code true} if the movies share an actor; {@code false} otherwise
+     */
     @Override
     public boolean areConnected(Movie a, Movie b) {
         List<String> actorsA = a.getActors();
@@ -22,6 +34,11 @@ public class ActorConnection implements ConnectionStrategy {
         return false;
     }
 
+    /**
+     * Returns the type of connection this strategy represents.
+     *
+     * @return the string "Actor"
+     */
     @Override
     public String getType() {
         return "Actor";
