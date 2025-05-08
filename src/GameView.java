@@ -439,16 +439,20 @@ public class GameView {
      */
     public String[] getPlayerNames() {
         clearScreen();
-        printString(0, 0, "Hey there, welcome to Group 20's Movie Name Game!");
-        printString(0, 2, "Please enter the names of the two players.");
 
-        printString(0, 4, "Enter name for Player 1: ");
-        String player1Name = getUserInput(25, 4);
+        printString(6, 3, "╔══════════════════════════════════════════════════════════════╗");
+        printString(6, 4, "║       Hey there, welcome to Group 20's Movie Name Game!      ║");
+        printString(6, 5, "╚══════════════════════════════════════════════════════════════╝");
 
-        printString(0, 6, "Enter name for Player 2: ");
-        String player2Name = getUserInput(25, 6);
+        printString(6, 7, "Please enter the names of the two players.");
 
-        return new String[]{player1Name, player2Name};
+        printString(6, 9, "Enter name for Player 1: ");
+        String player1Name = getUserInput(34, 9); // adjusted x for alignment
+
+        printString(6, 11, "Enter name for Player 2: ");
+        String player2Name = getUserInput(34, 11); // adjusted y to avoid overlap
+
+        return new String[] { player1Name, player2Name };
     }
 
     /**
@@ -463,17 +467,22 @@ public class GameView {
 
     public WinConditionStrategy getPlayersWinConditions(MovieDatabase movieDatabase) {
         clearScreen();
-        printString(0, 0, "You have 3 win conditions to choose from:");
-        printString(0, 2, "1. Genre");
-        printString(0, 3, "2. Actor");
-        printString(0, 4, "3. Director");
-        printString(0, 6, "Enter choice (1-3): ");
+
+        printString(2, 1, "╔══════════════════════════════════════════════════════════════╗");
+        printString(2, 2, "║                  Choose Your Win Condition!                  ║");
+        printString(2, 3, "╚══════════════════════════════════════════════════════════════╝");
+
+        printString(4, 5, "You have 3 win conditions to choose from:");
+        printString(6, 7, "1. Genre");
+        printString(6, 8, "2. Actor");
+        printString(6, 9, "3. Director");
 
         int winConditionChoice = 0;
-        int choiceRow = 6;
+        int choiceRow = 11;
+
         while (true) {
-            printString(0, choiceRow, "Enter choice (1-3):                     ");
-            String choiceInput = getUserInput(20, choiceRow);
+            printString(4, choiceRow, "Enter choice (1-3):                           ");
+            String choiceInput = getUserInput(25, choiceRow);
             try {
                 winConditionChoice = Integer.parseInt(choiceInput);
                 if (winConditionChoice >= 1 && winConditionChoice <= 3) {
@@ -482,26 +491,34 @@ public class GameView {
             } catch (NumberFormatException ignored) {}
 
             choiceRow += 2;
-            printString(0, choiceRow, "Invalid input. Please enter 1, 2, or 3.");
+            printString(4, choiceRow, "Invalid input. Please enter 1, 2, or 3.");
         }
 
-    
         int difficultyRow = choiceRow + 3;
         String difficulty = "";
+
         while (true) {
-            printString(0, difficultyRow, "Difficulty? (easy, medium, hard):                     ");
-            difficulty = getUserInput(35, difficultyRow).toLowerCase().trim();
+            printString(4, difficultyRow, "Difficulty? (easy, medium, hard):                       ");
+            difficulty = getUserInput(38, difficultyRow).toLowerCase().trim();
+
             if (difficulty.equals("easy") || difficulty.equals("medium") || difficulty.equals("hard")) {
                 break;
             }
+
             difficultyRow += 2;
-            printString(0, difficultyRow, "Invalid input. Please choose again easy, medium, or hard.");
+            printString(4, difficultyRow, "Invalid input. Please choose again: easy, medium, or hard.");
         }
+
         int count;
         switch (difficulty) {
-            case "easy": count = 3; break;
-            case "hard": count = 7; break;
-            default: count = 5;
+            case "easy":
+                count = 3;
+                break;
+            case "hard":
+                count = 7;
+                break;
+            default:
+                count = 5;
         }
 
         WinConditionStrategy winCondition;
