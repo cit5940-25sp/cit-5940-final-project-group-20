@@ -1,5 +1,10 @@
 import java.util.*;
 
+/**
+ * Represents a single state of the Movie Name Game.
+ * Tracks players, the current movie, played movies, round number,
+ * connection usage statistics, game progress, and recent connection history.
+ */
 public class GameState {
     private List<Player> players; // list of players in the game
     private int currentPlayerIndex; // represents current player (0 for player1, 1 for player2)
@@ -10,7 +15,11 @@ public class GameState {
     private boolean isGameOver; // check if the game is over
     private List<String> connectionHistory; // track last few moves
 
-    // construct and initialize
+    /**
+     * Constructs an initial game state with default values.
+     * Players, played movies, connection counts, and connection history
+     * are initialized to empty structures.
+     */
     public GameState() {
         this.players =  new ArrayList<>(); // only players are initialized once they type in names
         this.currentPlayerIndex = 0; // player 1 starts
@@ -21,6 +30,13 @@ public class GameState {
         this.isGameOver = false;
     }
 
+    /**
+     * Initializes a new game with the given players and starting movie.
+     * Resets round count, connection usage, played movie list, and game-over status.
+     *
+     * @param players        the list of players participating
+     * @param startingMovie  the first movie to start the game
+     */
     public void initializeGame(List<Player> players, Movie startingMovie) {
         this.players = players;
         this.currentPlayerIndex = 0; // player1 starts
@@ -32,48 +48,85 @@ public class GameState {
         this.connectionHistory = new ArrayList<>();
     }
 
-    // get current player
+    /**
+     * Returns the current player.
+     *
+     * @return the player whose turn it is
+     */
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
 
-    // get current movie
+    /**
+     * Returns the movie that the current player must connect to.
+     *
+     * @return the current movie in play
+     */
     public Movie getCurrentMovie() {
         return currentMovie;
     }
 
-    // Switch to the next player
+    /**
+     * Switches the turn to the next player.
+     * Can be multiple players greater (not only for 2 players)
+     */
+
     public void switchPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // toggle using modulo
     }
 
-    // check if the game is over
+
+    /**
+     * Sets the game over state.
+     *
+     * @param gameOver {@code true} if the game is over, otherwise {@code false}
+     */
     public void setGameOver(boolean gameOver) {
         this.isGameOver = gameOver;
     }
 
-    // get the round number
+    /**
+     * Returns the current round number.
+     *
+     * @return the round count
+     */
     public int getRound() {
         return round;
     }
 
 
-    // increment the round number after each turn
+    /**
+     * Increments the round number by one.
+     */
     public void incrementRound() {
         this.round++;
     }
 
-    // add movie to the list of played movies
+    /**
+     * Adds a movie to the set of played movies.
+     *
+     * @param movie the movie to add
+     */
     public void addPlayedMovie(Movie movie) {
         playedMovies.add(movie);
     }
 
-    // get all played movies
+    /**
+     * Returns all movies that have been played so far.
+     *
+     * @return a set of played {@code Movie} objects
+     */
     public Set<Movie> getPlayedMovies() {
         return playedMovies;
     }
 
-    // update the game state with next movie and connection type used
+    /**
+     * Updates the game state by setting the next movie and recording the connection type.
+     * Also adds the connection to history and updates connection usage.
+     *
+     * @param nextMovie      the next movie played
+     * @param connectionType the connection type used to transition to the next movie
+     */
     public void updateState(Movie nextMovie, String connectionType) {
 
         if (currentMovie != null && nextMovie != null) {
@@ -92,36 +145,69 @@ public class GameState {
         incrementConnectionUsage(connectionType);
     }
 
+    /**
+     * Returns the list of the most recent movie connections.
+     *
+     * @return a list of connection history strings
+     */
     public List<String> getRecentHistory() {
         return new ArrayList<>(connectionHistory);
     }
 
-    // How many times has this connection type been used?
+    /**
+     * Returns how many times a given connection type has been used.
+     *
+     * @param connectionType the type of connection
+     * @return the number of times this connection has been used
+     */
     public int getConnectionUsage(String connectionType) {
         return connectionUsageCount.getOrDefault(connectionType, 0);
     }
 
-    // Increment the usage count for a connection type
+    /**
+     * Increments the count for a specific connection type.
+     *
+     * @param connectionType the connection type to increment
+     */
+
     public void incrementConnectionUsage(String connectionType) {
         connectionUsageCount.put(connectionType, connectionUsageCount.getOrDefault(connectionType, 0) + 1);
     }
 
-    // check if a player has won based on the win condition
+    /**
+     * Checks whether a player has satisfied their win condition.
+     *
+     * @param player the player to check
+     * @return {@code true} if the player has won; otherwise {@code false}
+     */
     public boolean hasPlayerWon(Player player) {
         return player.hasWon(); // player knows its own win conditino
     }
 
+    /**
+     * Returns the list of players in the game.
+     *
+     * @return a list of {@code Player} objects
+     */
     public List<Player> getPlayers() {
         return players;
     }
 
 
-    // Is the game finished based on win condition or other rules?
+    /**
+     * Returns whether the game is currently over.
+     *
+     * @return {@code true} if the game has ended; otherwise {@code false}
+     */
     public boolean isGameOver() {
         return isGameOver;
     }
 
-    // Get the winner of the game
+    /**
+     * Returns the player who has won the game, if any.
+     *
+     * @return the winning player, or {@code null} if no one has won yet
+     */
     public Player getWinner() {
         for (Player player : players) {
             if (player.hasWon()) {

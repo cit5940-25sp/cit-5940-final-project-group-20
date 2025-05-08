@@ -1,4 +1,16 @@
+/**
+ * Implements a connection strategy based on shared cinematographers between two movies.
+ * Two movies are considered connected if they have the same cinematographer.
+ */
 public class CinematographerConnection implements ConnectionStrategy {
+    /**
+     * Determines whether two movies are connected by having the same cinematographer.
+     * Returns {@code true} if both movies list the same cinematographer and neither is {@code null}.
+     *
+     * @param a the first movie
+     * @param b the second movie
+     * @return {@code true} if the movies share the same cinematographer; {@code false} otherwise
+     */
     @Override
     public boolean areConnected(Movie a, Movie b) {
         String cinematographerA = a.getCinematographer();
@@ -10,8 +22,11 @@ public class CinematographerConnection implements ConnectionStrategy {
 
         return cinematographerA.equals(cinematographerB);
     }
-
-    @Override
+    /**
+     * Returns the type of connection this strategy represents.
+     *
+     * @return the string "Cinematographer"
+     */
     public String getType() {
         return "Cinematographer";
     }

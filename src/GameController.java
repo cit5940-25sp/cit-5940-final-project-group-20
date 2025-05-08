@@ -9,6 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import com.googlecode.lanterna.input.KeyStroke;
 
+/**
+ * Controls the flow of the Movie Name Game, managing turns, input, timer, and game logic.
+ * Coordinates between the {@code GameView}, {@code GameState}, {@code MovieDatabase},
+ * and various {@code ConnectionStrategy} instances.
+ * It's like the conductor of the game orchestrating the logic and functions!
+ */
 public class GameController {
     private GameView gameView;
     private GameState gameState;
@@ -22,6 +28,16 @@ public class GameController {
     private volatile boolean timeoutOccurred = false;
     private ScheduledFuture<?> timerTask; //
 
+
+    /**
+     * Constructs a GameController with the necessary components
+     * and initializes autocomplete with movie titles
+     *
+     * @param gameState the shared game state
+     * @param gameView the UI view to interact with players
+     * @param movieDatabase the movie database used to validate and connect movies
+     * @param connectionStrategies the list of strategies that define valid movie-to-movie connections
+     */
     public GameController(GameState gameState, GameView gameView, MovieDatabase movieDatabase,
                           List<ConnectionStrategy> connectionStrategies) {
         this.gameState = gameState;
@@ -35,6 +51,11 @@ public class GameController {
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
 
+    /**
+     * Starts the game setup and first player turn.
+     * Prompts for player names and win conditions,
+     * initializes game state, and launches the first round.
+     */
     public void startGame() {
         String[] playerNames = gameView.getPlayerNames();
 
@@ -59,7 +80,11 @@ public class GameController {
 
         startTurn();
     }
-
+    /**
+     * Begins a player's turn,
+     * handling input, suggestions, timeout, and move validation.
+     * Then continues until the game ends keep changing the turn
+     */
     private void startTurn() {
         if (gameState.isGameOver()) {
             return;
@@ -127,7 +152,10 @@ public class GameController {
             startTurn();
         }
     }
-
+    /**
+     * Starts the countdown timer for the current player's turn.
+     * Ends the turn if the time reaches zero.
+     */
     private void startTimer() {
         if (timerTask != null && !timerTask.isDone()) {
             timerTask.cancel(true);
@@ -154,8 +182,10 @@ public class GameController {
             }
         }, 1, 1, TimeUnit.SECONDS);
     }
-
-    // Terminates Game once time is up! 
+    /**
+     * Handles a timeout when a player fails to make a move in time.
+     * Immediately ends the game and declares the other player as winner.
+     */
     private void timeout() {
         stopTimer();
         timeoutOccurred = true;
@@ -172,7 +202,9 @@ public class GameController {
         }
     }
 
-    
+    /**
+     * Stops the active timer task.
+     */
     private void stopTimer() {
         turnActive = false;
         if (timerTask != null && !timerTask.isDone()) {
@@ -180,10 +212,21 @@ public class GameController {
         }
     }
 
+    /**
+     * Updates only the timer display on the game screen.
+     */
+
     private void updateScreen() {
         gameView.updateTimerOnly(secondsRemaining);
     }
 
+    /**
+     * Processes the player's movie guess
+     * and validates it using the defined connection strategies.
+     * If the move is valid and not previously used, the game state is updated accordingly.
+     *
+     * @param movieTitle the title of the movie guessed by the player
+     */
     private void handlePlayerMove(String movieTitle) {
         Movie nextMovie = movieDatabase.getMovieByTitle(movieTitle);
 
@@ -226,7 +269,10 @@ public class GameController {
             gameView.showMessageAndPause("Invalid connection. Try again.");
         }
     }
-
+    /**
+     * Ends the current player's turn, switches to the next player,
+     * and increments the round.
+     */
     private void endTurnAndSwitchPlayer() {
         gameState.switchPlayer();
         gameState.incrementRound();
