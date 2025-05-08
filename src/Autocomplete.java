@@ -23,7 +23,7 @@ public class Autocomplete implements IAutocomplete {
         Node currentnode = root;
         currentnode.setPrefixes((currentnode.getPrefixes() + 1));
         for (int i = 0; i < word.length(); i++) {
-            char currentchar = word.charAt(i);
+            char currentchar = Character.toLowerCase(word.charAt(i));
             //need to be able to match lower and upper case harry
             int referenceindex = currentchar;
             // if no reference, create node
@@ -82,7 +82,7 @@ public class Autocomplete implements IAutocomplete {
         Node currentnode = root;
         //prefix = prefix.toLowerCase();
         for (int i = 0; i < prefix.length(); i++) {
-            char c = prefix.charAt(i);
+            char c = Character.toLowerCase(prefix.charAt(i));
             int referenceindex = c;
             if (referenceindex < 0 || referenceindex > 256) {
                 return null;

@@ -324,6 +324,22 @@ public class GameView {
         }
     }
 
+    public void displaySuggestions(List<String> suggestions) {
+        int startRow = 28; // start just below input line
+        int maxSuggestions = 5;
+        int suggestionCol = 10; // align with user input start
+
+        // Step 1: Clear previous suggestions
+        for (int i = 0; i < maxSuggestions; i++) {
+            printString(suggestionCol, startRow + i, " ".repeat(80));
+        }
+
+        // Step 2: Print new suggestions
+        for (int i = 0; i < Math.min(suggestions.size(), maxSuggestions); i++) {
+            printString(suggestionCol, startRow + i, "- " + suggestions.get(i));
+        }
+    }
+
     public String[] getPlayerNames() {
         clearScreen();
         printString(0, 0, "Hey there, welcome to Group 20's Movie Name Game!");

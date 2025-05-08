@@ -1,5 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collection;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -13,6 +15,7 @@ public class GameController {
     private MovieDatabase movieDatabase;
     private List<ConnectionStrategy> connectionStrategies;
     private ScheduledExecutorService scheduler;
+    private Autocomplete autocomplete;
 
     private volatile boolean turnActive = false;
     private volatile int secondsRemaining = 30;
@@ -24,6 +27,10 @@ public class GameController {
         this.gameState = gameState;
         this.gameView = gameView;
         this.movieDatabase = movieDatabase;
+        this.autocomplete = new Autocomplete();
+        Collection<Movie> allMovies = movieDatabase.getAllMovies();
+        autocomplete.buildTrie(allMovies);
+
         this.connectionStrategies = connectionStrategies;
         this.scheduler = Executors.newScheduledThreadPool(1);
     }
@@ -76,7 +83,15 @@ public class GameController {
                 switch (keyStroke.getKeyType()) {
                     case Character:
                         inputBuffer.append(keyStroke.getCharacter());
-                        gameView.updatePlayerInput(inputBuffer.toString());
+                        String currentInput = inputBuffer.toString();
+                        gameView.updatePlayerInput(currentInput);
+                        // display auto complete suggestions
+                        List<ITerm> suggestions = autocomplete.getSuggestions(currentInput);
+                        List<String> topSuggestions = new ArrayList<>();
+                        for (int i = 0; i < Math.min(5, suggestions.size()); i++) {
+                            topSuggestions.add(suggestions.get(i).toString());
+                        }
+                        gameView.displaySuggestions(topSuggestions);
                         break;
                     case Enter:
                         String submitted = inputBuffer.toString().trim();
