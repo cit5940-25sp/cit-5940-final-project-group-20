@@ -1,12 +1,22 @@
 import java.util.*;
-
+/**
+ * Class for a players in the Movie Name Game.
+ * Each player has a name, score, a list of movies they have played,
+ * and a win condition strategy that defines how they can win.
+ */
 public class Player {
     private String name;
     private int score;
     private List<Movie> moviesPlayed; // list of movies player has played
     private WinConditionStrategy winCondition;
 
-    // constructor. Initialize the player with their name
+    /**
+     * Constructs a new Player with the name user typed in
+     * Initializes the score to 0 and the list of played movies to empty.
+     *
+     * @param name the name of the player
+     */
+
     public Player(String name) {
         this.name = name;
         this.score = 0;
@@ -14,41 +24,73 @@ public class Player {
         this.winCondition = null; // default not set
     }
 
-    // Return player's name
+    /**
+     * Get the name of the player.
+     *
+     * @return the player's name
+     */
     public String getName() {
         return name;
     }
 
-    // get player's score
+    /**
+     * Get the current score of the player.
+     *
+     * @return the player's score
+     */
     public int getScore() {
         return score;
     }
 
-    // Add a movie the player just played (only if it hasn't been played already)
+    /**
+     * Adds a movie to the player's list of played movies.
+     * If the movie has not already been played, it is added
+     * and the score is incremented.
+     *
+     * @param movie the movie to add
+     */
+
     public void addMovie(Movie movie) {
-        if (!moviesPlayed.contains(movie)) {  // Ensure movie isn't added twice
+        if (!moviesPlayed.contains(movie)) {  // make sure user can't add same movie twice
             moviesPlayed.add(movie);
-            score++;  // Increase score whenever a new movie is added
+            score++;  // add score if user adds movie
         }
     }
 
-    // Get all movies the player has played so far
+    /**
+     * Returns the list of movies the player has played.
+     *
+     * @return a list of {@code Movie} objects played by the player
+     */
     public List<Movie> getMoviesPlayed() {
         return moviesPlayed;
     }
 
-    // set wincondition
+    /**
+     * Sets the win condition strategy for the player.
+     *
+     * @param winCondition the win condition strategy to assign
+     */
+
     public void setWinCondition(WinConditionStrategy winCondition) {
         this.winCondition = winCondition;
     }
 
-    // get win condition
+    /**
+     * Returns the current win condition strategy of the player.
+     *
+     * @return the player's win condition strategy
+     */
     public WinConditionStrategy getWinCondition() {
         return this.winCondition;
     }
 
 
-    // Check if this specifc player has won based on the win condition
+    /**
+     * Checks if the player has satisfied their win condition.
+     *
+     * @return {@code true} if the win condition is satisfied, {@code false} otherwise
+     */
     public boolean hasWon() {
         if (winCondition == null) {
             return false;
@@ -56,7 +98,11 @@ public class Player {
         return winCondition.isSatisfied(this);
     }
 
-    // reset the player's score (when start a new game)
+    /**
+     * Resets the player's score to 0.
+     * Handy when restarting the game
+     */
+
     public void resetScore() {
         this.score = 0;
     }
