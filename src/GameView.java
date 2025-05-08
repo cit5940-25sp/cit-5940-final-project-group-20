@@ -463,6 +463,29 @@ public class GameView {
         return new String[] { player1Name, player2Name };
     }
 
+
+    /**
+     * Centers a string within a specified width by adding space padding to the left and right.
+     * <p>
+     * If the string is longer than the desired width, it is truncated. If it's shorter,
+     * it will be centered with even spacing on both sides (or one extra space on the right if needed).
+     * This is useful for aligning text inside a fixed-width box in terminal UIs.
+     *
+     * @param text  the text to be centered
+     * @param width the total width to center the text within
+     * @return a string of exactly {@code width} characters, with the input text centered
+     */
+    private String centerInBox(String text, int width) {
+        int pad = width - text.length();
+
+        if (pad <= 0) {
+            return text.substring(0, width); // truncate if too long
+        }
+        int left = pad / 2;
+        int right = pad - left;
+        return " ".repeat(left) + text + " ".repeat(right);
+    }
+
     /**
      * Prompts the player to choose a win condition (Genre, Actor, or Director) and a difficulty level.
      * <p>
@@ -472,21 +495,25 @@ public class GameView {
      * @param movieDatabase the database of available movies used to generate condition options
      * @return a {@link WinConditionStrategy} representing the player's chosen win condition
      */
-
-    public WinConditionStrategy getPlayersWinConditions(MovieDatabase movieDatabase) {
+    public WinConditionStrategy getPlayersWinConditions(Player player, MovieDatabase movieDatabase) {
         clearScreen();
 
-        printString(2, 1, "╔══════════════════════════════════════════════════════════════╗");
-        printString(2, 2, "║                  Choose Your Win Condition!                  ║");
-        printString(2, 3, "╚══════════════════════════════════════════════════════════════╝");
+        // Ensures your title line is centered and fits exactly
+        String title = player.getName() + " - Choose Your Win Condition!";
+        String centered = centerInBox(title, 66);
+        printString(2, 1, "╔" + "═".repeat(66) + "╗");
+        printString(2, 2, "║" + centered + "║");
+        printString(2, 3, "╚" + "═".repeat(66) + "╝");
+
 
         printString(4, 5, "You have 3 win conditions to choose from:");
         printString(6, 7, "1. Genre");
         printString(6, 8, "2. Actor");
         printString(6, 9, "3. Director");
 
-        int winConditionChoice = 0;
+
         int choiceRow = 11;
+        int winConditionChoice = choiceRow + 1;
 
         while (true) {
             printString(4, choiceRow, "Enter choice (1-3):                           ");
@@ -499,32 +526,51 @@ public class GameView {
             } catch (NumberFormatException ignored) {}
 
             choiceRow += 2;
-            printString(4, choiceRow, "Invalid input. Please enter 1, 2, or 3.");
+            printString(4, choiceRow, "Invalid input! Please enter 1, 2, or 3.");
+            choiceRow += 2;
         }
 
         int difficultyRow = choiceRow + 3;
         String difficulty = "";
 
+        int difficultyChoice = 0;
+
+        printString(4, difficultyRow, "Select difficulty level:");
+        printString(6, difficultyRow + 1, "1. Easy");
+        printString(6, difficultyRow + 2, "2. Medium");
+        printString(6, difficultyRow + 3, "3. Hard");
+
+        int difficultyInputRow = difficultyRow + 5;
+
         while (true) {
-            printString(4, difficultyRow, "Difficulty? (easy, medium, hard):                       ");
-            difficulty = getUserInput(38, difficultyRow).toLowerCase().trim();
+            printString(4, difficultyInputRow, "Enter choice (1-3): ");
+            String choice = getUserInput(25, difficultyInputRow).trim();
+            try {
+                difficultyChoice = Integer.parseInt(choice);
+                if (difficultyChoice >= 1 && difficultyChoice <= 3) {
+                    break;
+                }
+            } catch (NumberFormatException ignored) {}
 
-            if (difficulty.equals("easy") || difficulty.equals("medium") || difficulty.equals("hard")) {
-                break;
-            }
-
-            difficultyRow += 2;
-            printString(4, difficultyRow, "Invalid input. Please choose again: easy, medium, or hard.");
+            difficultyInputRow += 2;
+            printString(4, difficultyInputRow, "Invalid input! Please enter 1, 2, or 3.");
+            difficultyInputRow += 2;
         }
 
         int count;
-        switch (difficulty) {
-            case "easy":
+        switch (difficultyChoice) {
+            case 1:
                 count = 3;
                 break;
-            case "hard":
+
+            case 2:
+                count = 5;
+                break;
+
+            case 3:
                 count = 7;
                 break;
+
             default:
                 count = 5;
         }

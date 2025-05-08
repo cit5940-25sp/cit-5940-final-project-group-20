@@ -63,8 +63,10 @@ public class GameController {
         Player player2 = new Player(playerNames[1]);
         List<Player> players = Arrays.asList(player1, player2);
 
-        player1.setWinCondition(gameView.getPlayersWinConditions(movieDatabase));
-        player2.setWinCondition(gameView.getPlayersWinConditions(movieDatabase));
+
+        // ADDED PLAYER1, 2
+        player1.setWinCondition(gameView.getPlayersWinConditions(player1, movieDatabase));
+        player2.setWinCondition(gameView.getPlayersWinConditions(player2, movieDatabase));
 
         Movie startingMovie = movieDatabase.getValidStartingMovie(connectionStrategies);
         
