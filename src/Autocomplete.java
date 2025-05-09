@@ -1,11 +1,14 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Implements autocomplete using a trie (prefix tree)
+ *
+ * This class supports insertion of words associated with Movie objects
+ * and provides efficient prefix-based lookup and suggestion functionality.
+ * It is case-insensitive and ignores invalid characters (non-ASCII).
+ */
 public class Autocomplete implements IAutocomplete {
     private Node root;
 
@@ -49,11 +52,21 @@ public class Autocomplete implements IAutocomplete {
 
 
     }
-
+    /**
+     * Returns root node of trie
+     *
+     * @return root node
+     */
     public Node getRoot() {
         return this.root;
     }
 
+    /**
+     * Checks if a word is valid with only ASCII chars
+     *
+     * @param word the string to check
+     * @return true if all chars are valid otherwise false
+     */
     public boolean validChars(String word) {
         for (int i = 0; i < word.length(); i++) {
             //ASCII
@@ -65,10 +78,17 @@ public class Autocomplete implements IAutocomplete {
         return true;
     }
 
+    /**
+     * Builds the trie from a collection of Movie objects.
+     * Each movie's searchable title is added to the trie.
+     *
+     * @param movies the collection of movies to add
+     * @return the root node of the completed trie
+     */
     @Override
     public Node buildTrie(Collection<Movie> movies) {
 
-        for(Movie m : movies){
+        for (Movie m : movies) {
             if (m == null) {
                 continue;
             }
@@ -77,13 +97,21 @@ public class Autocomplete implements IAutocomplete {
         return this.root;
     }
 
+    /**
+     * Retrieves the sub-trie rooted at the end of the given prefix.
+     *
+     * Returns null if the prefix is not found or contains invalid characters.
+     *
+     * @param prefix the prefix to search for
+     * @return the node representing the end of the prefix path, or null if not found
+     */
     @Override
     public Node getSubTrie(String prefix) {
         Node currentnode = root;
-        //prefix = prefix.toLowerCase();
         for (int i = 0; i < prefix.length(); i++) {
             char c = Character.toLowerCase(prefix.charAt(i));
             int referenceindex = c;
+            //checks for valid ASCII if not return null
             if (referenceindex < 0 || referenceindex > 256) {
                 return null;
             }
@@ -95,15 +123,14 @@ public class Autocomplete implements IAutocomplete {
         return currentnode;
     }
 
-    @Override
-    public int countPrefixes(String prefix) {
-        if (getSubTrie(prefix) == null) {
-            return 0;
-        }
-        return getSubTrie(prefix).getPrefixes();
-    }
 
 
+    /**
+     * Retrieves all complete words in the trie that start with the given prefix.
+     *
+     * @param prefix the prefix to search for
+     * @return a list of ITerm suggestions matching the prefix
+     */
     @Override
     public List<ITerm> getSuggestions(String prefix) {
         List<ITerm> suggestions = new ArrayList<>();
@@ -118,7 +145,12 @@ public class Autocomplete implements IAutocomplete {
         return suggestions;
     }
 
-    //helper function
+    /**
+     * Recursively traverses the trie from the given node to collect complete terms.
+     *
+     * @param currentnode  the current node in traversal
+     * @param suggestions  the list to accumulate matching terms
+     */
     private void helperFunction(Node currentnode,List<ITerm> suggestions) {
         //checking if currentnode points to a complete word
         if (currentnode.getWords() == 1) {

@@ -29,4 +29,16 @@ public class CSVDataImporterTest {
         assertEquals("Renee Zellweger", DataCleaner.clean("Renu00e9e Zellweger"));
     }
 
+
+    @org.junit.Test
+    public void testspecialchars() {
+        CSVDataImporter importer = new CSVDataImporter();
+        Map<Integer, Movie> temp = importer.importDataMovie("tmdb_5000_movies.csv");
+        Map<Integer, Movie> movies = importer.importDataCredit("tmdb_5000_credits.csv", temp);
+        Movie t = temp.get(16911);
+        assertEquals("The Inhabited Island", t.getTitle());
+        assertEquals(2008, t.getReleaseYear());
+        List<String> actors = t.getActors();
+        assertTrue(!actors.isEmpty());
+    }
 }

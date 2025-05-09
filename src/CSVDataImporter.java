@@ -89,6 +89,8 @@ public class CSVDataImporter implements IDataImporter {
                     genres.add(DataCleaner.clean(genrename));
                 }
 
+                //used for testing
+                //System.out.println(title);
                 Movie movie = new Movie(DataCleaner.clean(title), releaseYear, null, null, null, null, null, genres);
                 hash.put(id, movie);
                 rowNumber++;
@@ -174,6 +176,10 @@ public class CSVDataImporter implements IDataImporter {
                     String castname = ((JSONObject) castarray.get(i)).getString("name");
                     //cleaning
                     castname = DataCleaner.clean(castname);
+                    //cleaning for additional chars
+                    if(DataCleaner.hasWeirdChar(castname)){
+                        continue;
+                    }
                     actors.add(castname);
                 }
 
@@ -226,12 +232,6 @@ public class CSVDataImporter implements IDataImporter {
             e.printStackTrace();
         }
         return movies;
-    }
-
-
-    private boolean hasHeader() {
-
-        return false;
     }
 }
 

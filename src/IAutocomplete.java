@@ -37,12 +37,6 @@ public interface IAutocomplete
     public Node getSubTrie(String prefix);
 
 
-    /**
-     * @param prefix
-     * @return the number of words that start with prefix.
-     */
-    public int countPrefixes(String prefix);
-
 
     /**
      * This method should not throw an exception.
