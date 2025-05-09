@@ -11,9 +11,10 @@ public class GameState {
     private Movie currentMovie; // movie that the current player has to connect to
     private Set<Movie> playedMovies; // set to track all played moview
     private int round; // how many rounds have we gone (current round number)
-    private Map<String, Integer> connectionUsageCount; // connection usage count for each type (actor, director etc)
+    private Map<String, Integer> specificConnectionUsageCount;
     private boolean isGameOver; // check if the game is over
     private List<String> connectionHistory; // track last few moves
+
 
     /**
      * Constructs an initial game state with default values.
@@ -26,7 +27,7 @@ public class GameState {
         this.currentMovie = null;
         this.playedMovies = new HashSet<>(); // can't play movies that's been already played
         this.round = 1; // start from round 1
-        this.connectionUsageCount = new HashMap<>();
+        this.specificConnectionUsageCount = new HashMap<>();
         this.isGameOver = false;
     }
 
@@ -43,7 +44,7 @@ public class GameState {
         this.currentMovie = startingMovie;
         this.playedMovies.clear(); // clear the list of playedMovies at the start
         this.round = 1; // start from round 1
-        this.connectionUsageCount.clear(); // clear connection usage count
+        this.specificConnectionUsageCount.clear();
         this.isGameOver = false; // initially gameOver is false
         this.connectionHistory = new ArrayList<>();
     }
@@ -74,7 +75,6 @@ public class GameState {
     public void switchPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // toggle using modulo
     }
-
 
     /**
      * Sets the game over state.
@@ -120,7 +120,6 @@ public class GameState {
         return playedMovies;
     }
 
-
     /**
      * Updates the game state by setting the next movie and recording the connection type.
      * Also adds the connection to history and updates connection usage.
@@ -143,7 +142,6 @@ public class GameState {
         }
         currentMovie = nextMovie;
         incrementRound();
-        incrementConnectionUsage(connectionType);
     }
 
     /**
@@ -156,54 +154,23 @@ public class GameState {
     }
 
     /**
-     * Returns how many times a given connection type has been used.
-     *
-     * @param connectionType the type of connection
-     * @return the number of times this connection has been used
-     */
-    public int getConnectionUsage(String connectionType) {
-        return connectionUsageCount.getOrDefault(connectionType, 0);
-    }
-
-    /**
-     * Checks if the specified connection type can be used (max 3 allowed).
-     *
-     * @param connectionType the connection strategy name (e.g., "Director")
-     * @return true if it can still be used and false if limit reached
-     */
-    public boolean canUseConnection(String connectionType) {
-        return getConnectionUsage(connectionType) < 3;
-    }
-
-    /**
-     * Increments the count for a specific connection type.
-     *
-     * @param connectionType the connection type to increment
-     */
-
-    public void incrementConnectionUsage(String connectionType) {
-        connectionUsageCount.put(connectionType, connectionUsageCount.getOrDefault(connectionType, 0) + 1);
-    }
-
-    /**
      * Checks whether a player has satisfied their win condition.
      *
      * @param player the player to check
      * @return {@code true} if the player has won; otherwise {@code false}
      */
     public boolean hasPlayerWon(Player player) {
-        return player.hasWon(); // player knows its own win conditino
+        return player.hasWon();
     }
 
     /**
      * Returns the list of players in the game.
      *
-     * @return a list of {@code Player} objects
+     * @return a list of Player objects
      */
     public List<Player> getPlayers() {
         return players;
     }
-
 
     /**
      * Returns whether the game is currently over.
@@ -228,4 +195,32 @@ public class GameState {
         return null;  // No winner if game isn't over
     }
 
+    /**
+     * Increments the usage count of a specific connection value and tracks how many times
+     * a unique connection (e.g., a specific genre like "Action",
+     * or a specific actor like "Tom Hanks") has been used in the game.
+     * The value is stored as a composite key in the format "Type:Value" (e.g., "Genre:Action").
+     *
+     * @param connectionType the type of connection (e.g., "Genre", "Director")
+     * @param value the specific connection value used (e.g., "Action", "Christopher Nolan")
+     */
+    public void incrementSpecificConnectionUsage(String connectionType, String value) {
+        String key = connectionType + ":" + value;
+        specificConnectionUsageCount.put(key, specificConnectionUsageCount.getOrDefault(key, 0) + 1);
+    }
+
+    /**
+     * Checks whether a specific connection value can still be used.
+     * A specific connection (e.g., "Genre:Action" or "Actor:Tom Hanks") can be used
+     * at most 3 times throughout the game. This method returns {@code true} if the usage
+     * count is less than 3.
+     *
+     * @param connectionType the type of connection (e.g., "Genre", "Director")
+     * @param value the specific connection value to check (e.g., "Action", "Christopher Nolan")
+     * @return {@code true} if the specific connection can still be used; otherwise {@code false}
+     */
+    public boolean canUseSpecificConnection(String connectionType, String value) {
+        String key = connectionType + ":" + value;
+        return specificConnectionUsageCount.getOrDefault(key, 0) < 3;
+    }
 }

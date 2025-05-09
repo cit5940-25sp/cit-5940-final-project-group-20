@@ -30,4 +30,15 @@ public class CinematographerConnection implements ConnectionStrategy {
     public String getType() {
         return "Cinematographer";
     }
+
+
+
+    @Override
+    public String getSharedElement(Movie a, Movie b) {
+        String ca = a.getCinematographer();
+        String cb = b.getCinematographer();
+        return (ca != null && cb != null && ca.equals(cb)) ? ca : null;
+    }
+
+
 }

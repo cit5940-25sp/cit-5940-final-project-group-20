@@ -43,4 +43,24 @@ public class ActorConnection implements ConnectionStrategy {
     public String getType() {
         return "Actor";
     }
+
+
+    @Override
+    public String getSharedElement(Movie a, Movie b) {
+        List<String> actorsA = a.getActors();
+        List<String> actorsB = b.getActors();
+
+        if (actorsA == null || actorsB == null) {
+            return null;
+        }
+
+        Set<String> actorSetA = new HashSet<>(actorsA);
+        for (String actorB : actorsB) {
+            if (actorSetA.contains(actorB)) {
+                return actorB;
+            }
+        }
+
+        return null;
+    }
 }

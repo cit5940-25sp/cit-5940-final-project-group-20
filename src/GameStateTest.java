@@ -17,11 +17,11 @@ public class GameStateTest {
     public void setUp() {
         gameState = new GameState();
 
-        List<String> actors1 = Arrays.asList("Actor A", "Actor B");
+        List<String> actors1 = Arrays.asList("Tom Hanks", "Actor B");
         List<String> genres1 = Arrays.asList("Sci-Fi", "Adventure");
 
-        List<String> actors2 = Arrays.asList("Actor C");
-        List<String> genres2 = Arrays.asList("Drama");
+        List<String> actors2 = Arrays.asList("Actor C", "Tom Hanks");
+        List<String> genres2 = Arrays.asList("Drama", "Adventure");
 
         movie1 = new Movie("Movie One", 2000, actors1, "Director X", "Writer X", "Cinematographer X", "Composer X", genres1);
         movie2 = new Movie("Movie Two", 2010, actors2, "Director Y", "Writer Y", "Cinematographer Y", "Composer Y", genres2);
@@ -33,12 +33,55 @@ public class GameStateTest {
         gameState.initializeGame(players, movie1);
     }
 
+    // Testing that we limit a SPECIFIC actor to only be used 3 times!
+    @Test
+    public void testSpecificActorConnection() {
+        String connectionType = "Actor";
+        String actor = "Tom Hanks";
+        assertTrue(gameState.canUseSpecificConnection(connectionType, actor));
+        // Increment/Use 3 times
+        for (int i = 0; i < 3; i++) {
+            gameState.incrementSpecificConnectionUsage(connectionType, actor);
+        }
+        // should now be blocked
+        assertFalse(gameState.canUseSpecificConnection("Actor", "Tom Hanks"));
+    }
+
+    // Testing that we limit a SPECIFIC Director to only be used 3 times!
+    @Test
+    public void testSpecificDirectorConnection() {
+        String connectionType = "Director";
+        String director = "Christopher Nolan";
+        assertTrue(gameState.canUseSpecificConnection(connectionType, director));
+        // Increment/Use 3 times
+        for (int i = 0; i < 3; i++) {
+            gameState.incrementSpecificConnectionUsage(connectionType, director);
+        }
+        // should now be blocked
+        assertFalse(gameState.canUseSpecificConnection(connectionType, director));
+    }
+
+    // Testing that we limit a SPECIFIC Genre to only be used 3 times!
+    @Test
+    public void testSpecificGenreUsageConnection() {
+        String connectionType = "Genre";
+        String genreValue = "Action";
+        assertTrue(gameState.canUseSpecificConnection(connectionType, genreValue));
+        // Increment/Use 3 times
+        for (int i = 0; i < 3; i++) {
+            gameState.incrementSpecificConnectionUsage(connectionType, genreValue);
+        }
+        // should now be blocked
+        assertFalse(gameState.canUseSpecificConnection(connectionType, genreValue));
+    }
+
+
     @Test
     public void testInitializeGameResetsAllFields() {
         gameState.addPlayedMovie(movie2);
-        gameState.incrementConnectionUsage("Actor");
+        gameState.incrementSpecificConnectionUsage("Genre", "Drama");
         gameState.setGameOver(true);
-        gameState.updateState(movie2, "Actor");
+        gameState.updateState(movie2, "Genre");
 
         List<Player> newPlayers = Arrays.asList(new Player("A"), new Player("B"));
         Movie newStart = new Movie("New Movie", 1999, Collections.emptyList(), "", "", "", "", Collections.emptyList());
@@ -49,8 +92,8 @@ public class GameStateTest {
         assertEquals(1, gameState.getRound());
         assertFalse(gameState.isGameOver());
         assertTrue(gameState.getPlayedMovies().isEmpty());
-        assertEquals(0, gameState.getConnectionUsage("Actor"));
         assertEquals(0, gameState.getRecentHistory().size());
+        assertTrue(gameState.canUseSpecificConnection("Genre", "Drama"));
     }
 
 
@@ -76,19 +119,6 @@ public class GameStateTest {
         assertTrue(gameState.getPlayedMovies().contains(movie1));
     }
 
-    //This is the connection testing that we are still a bit confused about
-    @Test
-    public void testConnectionUsage() {
-        assertTrue(gameState.canUseConnection("Genre"));
-        assertEquals(0, gameState.getConnectionUsage("Genre"));
-
-        gameState.incrementConnectionUsage("Genre");
-        gameState.incrementConnectionUsage("Genre");
-        gameState.incrementConnectionUsage("Genre");
-        //cannot use same connection more than 3 times
-        assertEquals(3, gameState.getConnectionUsage("Genre"));
-        assertFalse(gameState.canUseConnection("Genre"));
-    }
 
 
     @Test

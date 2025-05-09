@@ -246,18 +246,25 @@ public class GameController {
 
         boolean isValidMove = false;
         boolean connectionOverused = false;
-        for (ConnectionStrategy connection : connectionStrategies) {
-            String connectType = connection.getType(); // extracts the connection type
+        String specificValue = null;
+        String connectType = null; // extracts the connection type
 
+
+        for (ConnectionStrategy connection : connectionStrategies) {
+            connectType = connection.getType(); // extracts the connection type
+
+            // if they are connected, check connection is VALID
             if (connection.areConnected(gameState.getCurrentMovie(), nextMovie)) {
 
-                if (!gameState.canUseConnection(connectType)) {
-                    //gameView.showMessageAndPause("The '" + connectType + "' connection has already been used 3 times!");
+                specificValue = connection.getSharedElement(gameState.getCurrentMovie(), nextMovie);
+
+                if (!gameState.canUseSpecificConnection(connectType, specificValue)) {
                     connectionOverused = true;
-                    break;  // need to make sure this reprompts user!!
+                    break;  // reprompts
                 }
 
                 isValidMove = true;
+                gameState.incrementSpecificConnectionUsage(connectType, specificValue);
                 Player currentPlayer = gameState.getCurrentPlayer();
                 gameState.addPlayedMovie(nextMovie);
                 gameState.updateState(nextMovie, connection.getType());
@@ -278,8 +285,11 @@ public class GameController {
             endTurnAndSwitchPlayer();
             startTurn();
         } else if (connectionOverused) {
-            gameView.showMessageAndPause("That connection type has already been used 3 times!");
-            } else {
+            gameView.printString(0, 24, " ".repeat(120)); // Clear the prompt line
+            gameView.showMessageAndPause("The connection '" + specificValue + "' (" + connectType + ") has already been used 3 times!");
+
+        } else {
+                gameView.printString(0, 24, " ".repeat(120)); // Clear the prompt line
                 gameView.showMessageAndPause("Invalid connection. Try again.");
         }
     }

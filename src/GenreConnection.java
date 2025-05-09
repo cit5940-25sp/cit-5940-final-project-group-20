@@ -45,4 +45,22 @@ public  class GenreConnection implements ConnectionStrategy {
     public String getType() {
         return "Genre";
     }
+
+
+    @Override
+    public String getSharedElement(Movie a, Movie b) {
+        List<String> genresA = a.getGenres();
+        List<String> genresB = b.getGenres();
+        if (genresA == null || genresB == null) return null;
+
+        Set<String> setB = new HashSet<>(genresB);
+        for (String genre : genresA) {
+            if (setB.contains(genre)) {
+                return genre;
+            }
+        }
+        return null;
+    }
+
+
 }

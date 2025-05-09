@@ -32,4 +32,14 @@ public class DirectorConnection implements ConnectionStrategy {
     public String getType() {
         return "Director";
     }
+
+
+    @Override
+    public String getSharedElement(Movie a, Movie b) {
+        String dirA = a.getDirector();
+        String dirB = b.getDirector();
+        return (dirA != null && dirB != null && dirA.equalsIgnoreCase(dirB)) ? dirA : null;
+    }
+
+
 }

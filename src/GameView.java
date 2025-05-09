@@ -57,7 +57,7 @@ public class GameView {
      * @param row  the row at which to begin printing
      * @param text the text string to print
      */
-    private void printString(int col, int row, String text) {
+    public void printString(int col, int row, String text) {
         graphics.putString(col, row, text);
         try {
             screen.refresh();
@@ -125,7 +125,7 @@ public class GameView {
      */
     public void updatePlayerInput(String currentInput) {
         // Overwrite the input line
-        printString(10, 27, " ".repeat(80)); // Clear the full line
+        printString(10, 27, " ".repeat(150)); // Clear the full line
         printString(10, 27, currentInput); // Print new input
     }
 

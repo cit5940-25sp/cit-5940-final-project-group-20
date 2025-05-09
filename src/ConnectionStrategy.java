@@ -25,4 +25,16 @@ public interface ConnectionStrategy {
      * @return the name of the connection type
      */
     String getType();
+
+    /**
+     * Extracts the shared element (such as a common actor, genre, or director) that forms the basis
+     * of the connection between two movies, if one exists.
+     *
+     * @param m1 the first movie
+     * @param m2 the second movie
+     * @return the shared element string if present; {@code null} if no connection is found
+     */
+    String getSharedElement(Movie m1, Movie m2);
+
+
 }

@@ -34,4 +34,15 @@ public class ComposerConnection implements ConnectionStrategy {
     public String getType() {
         return "Composer";
     }
+
+
+
+    @Override
+    public String getSharedElement(Movie a, Movie b) {
+        String composerA = a.getComposer();
+        String composerB = b.getComposer();
+        return (composerA != null && composerB != null && composerA.equals(composerB)) ? composerA : null;
+    }
+
+
 }

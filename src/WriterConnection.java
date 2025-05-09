@@ -34,4 +34,13 @@ public class WriterConnection implements ConnectionStrategy {
     public String getType() {
         return "Writer";
     }
+
+    @Override
+    public String getSharedElement(Movie a, Movie b) {
+        String writerA = a.getWriter();
+        String writerB = b.getWriter();
+        return (writerA != null && writerB != null && writerA.equals(writerB)) ? writerA : null;
+    }
+
+
 }
