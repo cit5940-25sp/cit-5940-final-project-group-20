@@ -507,12 +507,12 @@ public class GameView {
 
 
         printString(4, 5, "You have 3 win conditions to choose from:");
-        printString(6, 7, "1. Genre");
-        printString(6, 8, "2. Actor");
-        printString(6, 9, "3. Director");
+        printString(6, 6, "1. Genre");
+        printString(6, 7, "2. Actor");
+        printString(6, 8, "3. Director");
 
 
-        int choiceRow = 11;
+        int choiceRow = 10;
         int winConditionChoice = choiceRow + 1;
 
         while (true) {
