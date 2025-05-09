@@ -44,6 +44,15 @@ public class MovieNameGame {
                 }
 
                 playAgain = view.promptRestart();
+
+                // TESTING SHOWING END MESSAGE!
+                if (!playAgain) {
+                    view.showThankYouMessage();
+                }
+
+                // TEST: FLUSH
+                // while (view.pollInput() != null) {}
+
             } while (playAgain);
         } finally {
             view.closeScreen();  // restores terminal

@@ -614,19 +614,74 @@ public class GameView {
      *         {@code false} if the player chooses not to ('n' or 'N') or if an error occurs
      */
     public boolean promptRestart() {
-        printString(0, 20, "Would you like to Play again? (y/n): ");
+        final int promptRow = 20;
+        int inputRow = promptRow + 4;
+        int errorRow = promptRow + 2;
+        final int inputCol = 6; // after '> '
+
+
+        while (true) {
+            // Clear all 3 lines
+            printString(0, promptRow, " ".repeat(80));
+            printString(0, inputRow, " ".repeat(80));
+            //printString(0, errorRow, " ".repeat(80));
+
+            // Prompt
+            printString(4, promptRow, "Would you like to play again? (y/n), then press Enter:");
+
+            // Print "> " input label
+            printString(4, inputRow, "> ");
+
+            // User input begins after "> "
+            String input = getUserInput(inputCol, inputRow).trim().toLowerCase();
+
+            if (input.equals("y")) return true;
+            if (input.equals("n")) return false;
+
+            // Show error message below
+            printString(4, errorRow, "Invalid input! Please enter 'y' or 'n'.");
+
+        }
+    }
+
+    /**
+     * Displays a thank you message at the end of the game,
+     * using a stylized frame and pausing briefly before closing the terminal.
+     */
+    /**
+     * Displays a visually styled thank-you message using ASCII art.
+     */
+    public void showThankYouMessage() {
+        clearScreen();
+
+        String[] message = {
+                "╔════════════════════════════════════════════════════════════════════════╗",
+                "║                                                                        ║",
+                "║          ████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗███████╗           ║",
+                "║          ╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝██╔════╝           ║",
+                "║             ██║   ███████║███████║██╔██╗ ██║█████╔╝ ███████╗           ║",
+                "║             ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗   ╔══██║           ║",
+                "║             ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██║███████╗           ║",
+                "║             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝           ║",
+                "║                                                                        ║",
+                "║             THANK YOU FOR PLAYING OUR MOVIE NAME GAME! (:              ║",
+                "║         We hope you had fun and discovered some great films.           ║",
+                "║                                                                        ║",
+                "╚════════════════════════════════════════════════════════════════════════╝"
+    };
+
+        int startRow = 8;
+
+        for (int i = 0; i < message.length; i++) {
+            int msgLength = message[i].length();
+            int startCol = (totalWidth - msgLength) / 2;
+            printString(startCol, startRow + i, message[i]);
+        }
+
         try {
-            while (true) {
-                KeyStroke key = screen.readInput(); // blocking
-                if (key.getKeyType() == KeyType.Character) {
-                    char c = key.getCharacter();
-                    if (c == 'y' || c == 'Y') return true;
-                    if (c == 'n' || c == 'N') return false;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            Thread.sleep(9000); // Show message for 9 seconds
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }
