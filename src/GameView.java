@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * VIEW PART OF MVC model
+ * VIEW PART OF our MVC model
  * Manages the text-based user interface for the Movie Name Game using the Lanterna library.
  * Displays player information, game state, timer, suggestions, and handles user input.
  * All of those that has to do with "interfacing with user via text"
