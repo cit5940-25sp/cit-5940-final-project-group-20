@@ -3861,7 +3861,7 @@ Genres: [Adventure, Drama, Fantasy, Romance]
 --------------------------------------------------
 Title: The Inhabited Island
 Release Year: 2008
-Actors: [Vasily Stepanov, Pyotr Fyodorov, u042eu043bu0438u044f u0421u043du0438u0433u0438u0440u044c, Fyodor Bondarchuk, Sergey Garmash, Mikhail Evlanov, Anna Mikhalkova, Sergei Barkovsky, Maksim Sukhanov, Ignat Akrachkov, Aleksey Serebryakov, Yuriy Kutsenko, Andrey Merzlikin, Sergey Taramaev, Olga Dolinina]
+Actors: [Vasily Stepanov, Pyotr Fyodorov, u042eu043bиu044f u0421u043dиrиpu044c, Fyodor Bondarchuk, Sergey Garmash, Mikhail Evlanov, Anna Mikhalkova, Sergei Barkovsky, Maksim Sukhanov, Ignat Akrachkov, Aleksey Serebryakov, Yuriy Kutsenko, Andrey Merzlikin, Sergey Taramaev, Olga Dolinina]
 Director: Fyodor Bondarchuk
 Writer: Eduard Volodarskiy
 Cinematographer: null
@@ -38304,7 +38304,7 @@ Genres: [Comedy, Family]
 --------------------------------------------------
 Title: A Good Day to Die Hard
 Release Year: 2013
-Actors: [Bruce Willis, Jai Courtney, Sebastian Koch, Mary Elizabeth Winstead, u042eu043bu0438u044f u0421u043du0438u0433u0438u0440u044c, Radivoje Bukviu0107, Cole Hauser, Amaury Nolasco, Sergey Kolesnikov, Roman Luknar, Zolee Ganxsta, Peter Takatsy, Pavel Lychnikoff, Megalyn Echikunwoke, Melissa Tang, Attila u00c1rpa, Norbert Nu00f6venyi, Martin Hindy, Rico Simonini, Anne Vyalitsyna]
+Actors: [Bruce Willis, Jai Courtney, Sebastian Koch, Mary Elizabeth Winstead, u042eu043bиu044f u0421u043dиrиpu044c, Radivoje Bukviu0107, Cole Hauser, Amaury Nolasco, Sergey Kolesnikov, Roman Luknar, Zolee Ganxsta, Peter Takatsy, Pavel Lychnikoff, Megalyn Echikunwoke, Melissa Tang, Attila u00c1rpa, Norbert Nu00f6venyi, Martin Hindy, Rico Simonini, Anne Vyalitsyna]
 Director: John Moore
 Writer: Roderick Thorp
 Cinematographer: null
