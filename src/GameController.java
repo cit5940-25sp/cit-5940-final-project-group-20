@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.Collection;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -110,35 +107,40 @@ public class GameController {
                 switch (keyStroke.getKeyType()) {
                     case Character:
                         inputBuffer.append(keyStroke.getCharacter());
-                        String currentInput = inputBuffer.toString();
-                        gameView.updatePlayerInput(currentInput);
-                        // display auto complete suggestions
-                        List<ITerm> suggestions = autocomplete.getSuggestions(currentInput);
-                        List<String> topSuggestions = new ArrayList<>();
-                        for (int i = 0; i < Math.min(5, suggestions.size()); i++) {
-                            topSuggestions.add(suggestions.get(i).toString());
+                        break;
+                    case Backspace:
+                        if (inputBuffer.length() > 0) {
+                            inputBuffer.deleteCharAt(inputBuffer.length() - 1);
                         }
-                        gameView.displaySuggestions(topSuggestions);
                         break;
                     case Enter:
                         String submitted = inputBuffer.toString().trim();
                         inputBuffer.setLength(0);
                         gameView.updatePlayerInput("");
+                        gameView.displaySuggestions(Collections.emptyList());
                         handlePlayerMove(submitted);
-                        break;
-                    case Backspace:
-                        if (inputBuffer.length() > 0) {
-                            inputBuffer.deleteCharAt(inputBuffer.length() - 1);
-                            gameView.updatePlayerInput(inputBuffer.toString());
-                        }
-                        break;
+                        continue; // Skip to next iteration after handling move
                     default:
                         break;
+                }
+
+                String currentInput = inputBuffer.toString();
+                gameView.updatePlayerInput(currentInput);
+
+                if (currentInput.trim().isEmpty()) {
+                    gameView.displaySuggestions(Collections.emptyList());
+                } else {
+                    List<ITerm> suggestions = autocomplete.getSuggestions(currentInput.trim());
+                    List<String> topSuggestions = new ArrayList<>();
+                    for (int i = 0; i < Math.min(5, suggestions.size()); i++) {
+                        topSuggestions.add(suggestions.get(i).toString());
+                    }
+                    gameView.displaySuggestions(topSuggestions);
                 }
             }
 
             if (timeoutOccurred) {
-                break; // clean exit after timeout
+                break;
             }
 
             try {
@@ -148,12 +150,12 @@ public class GameController {
             }
         }
 
-        // after exiting loop (timeout or valid move), if still playing
         if (!gameState.isGameOver()) {
             endTurnAndSwitchPlayer();
             startTurn();
         }
     }
+
     /**
      * Starts the countdown timer for the current player's turn.
      * Ends the turn if the time reaches zero.
