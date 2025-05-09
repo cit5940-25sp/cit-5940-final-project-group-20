@@ -2944,7 +2944,7 @@ Genres: [Adventure, Action, Comedy, Western]
 Title: Chocolat
 Release Year: 2000
 Actors: [Juliette Binoche, Alfred Molina, Johnny Depp, Judi Dench, Leslie Caron, Carrie-Anne Moss, Aurelien Parent Koenig, Lena Olin, Peter Stormare, John Wood, Antonio Gil, Hugh O'Conor, Victoire Thivisol, Gaelan Connell, Elisabeth Commelin, Ron Cook, Christianne Oliveira, Guillaume Tardieu, Harrison Pratt, Marion Hauducoeur]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -3529,8 +3529,8 @@ Genres: [Drama, Comedy, Music, Romance]
 Title: Planet 51
 Release Year: 2009
 Actors: [Dwayne Johnson, Seann William Scott, Jessica Biel, Justin Long, Gary Oldman, John Cleese, Freddie Benedict, Alan Marriott, Mathew Horne, James Corden, Lewis Macleod, Rupert Degas, Rebecca Front, Vincent Marzello, Emma Tate, Pete Atkin, Laurence Bouvard, Brian Bowles]
-Director: Marcos Martu00ednez
-Writer: Marcos Martu00ednez
+Director: Javier Abad
+Writer: Javier Abad
 Cinematographer: null
 Composer: null
 Genres: [Science Fiction, Animation, Family, Comedy, Adventure]
@@ -4043,7 +4043,7 @@ Title: Shorts
 Release Year: 2009
 Actors: [Jimmy Bennett, Kat Dennings, Jolie Vanier, William H. Macy, James Spader, Jon Cryer, Jake Short, Trevor Gagnon, Devon Gearhart, Rebel Rodriguez, Leo Howard, Racer Rodriguez, Rocket Rodriguez, John Chilleri, Josh Christman, Joshua Drew, Zach Irsik, Ryan Lee, Christina Lehner, James Leonardo Mayberry, Micaela Phillips, Bella Perryman, Cambell Westmoreland, Zoe Webb, Cameron R. Murphy, Henry J. Smith 3rd, Cameron Wofford, Alexis Woods, Leslie Mann]
 Director: Robert Rodriguez
-Writer: u00c1lvaro Rodru00edguez
+Writer: Robert Rodriguez
 Cinematographer: null
 Composer: null
 Genres: [Comedy, Family]
@@ -5139,7 +5139,7 @@ Genres: [Adventure, Fantasy, Family]
 --------------------------------------------------
 Title: The Mortal Instruments: City of Bones
 Release Year: 2013
-Actors: [Lily Collins, Jamie Campbell Bower, Kevin Zegers, Jemima West, Robert Sheehan, Lena Headey, Jared Harris, Aidan Turner, Godfrey Gao, Robert Maillet, Kevin Durand, CCH Pounder, Jonathan Rhys Meyers, Aidan Turner, Stephen R. Hart, Harry Van Gorkum, Chad Connell, Chris Ratz, Elyas Mu2019Barek, Pedro Miguel Arce, Matthew Cheng, Carlos Gonzalez-Vio]
+Actors: [Lily Collins, Jamie Campbell Bower, Kevin Zegers, Jemima West, Robert Sheehan, Lena Headey, Jared Harris, Aidan Turner, Godfrey Gao, Robert Maillet, Kevin Durand, CCH Pounder, Jonathan Rhys Meyers, Aidan Turner, Stephen R. Hart, Harry Van Gorkum, Chad Connell, Chris Ratz, Pedro Miguel Arce, Matthew Cheng, Carlos Gonzalez-Vio]
 Director: Harald Zwart
 Writer: Cassandra Clare
 Cinematographer: null
@@ -5905,7 +5905,7 @@ Genres: [Comedy, Drama, Romance]
 Title: Steamboy
 Release Year: 2004
 Actors: [Anne Suzuki, Masane Tsukayama, Katsuo Nakamura, Manami Konishi, Kiyoshi Kodama, Ikki Sawamura, Susumu Terajima]
-Director: Katsuhiro u014ctomo
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -6175,7 +6175,7 @@ Genres: [Drama, Comedy, Romance]
 Title: The True Story of Puss 'n Boots
 Release Year: 2009
 Actors: [Yolande Moreau, Louise Wallon, Arthur Deschamps, Jean-Claude Bolle-Reddat]
-Director: Macha Makeu00efeff
+Director: Pascal Herold
 Writer: Pascal Herold
 Cinematographer: null
 Composer: null
@@ -6273,8 +6273,8 @@ Genres: [Drama, Music]
 --------------------------------------------------
 Title: Assault on Precinct 13
 Release Year: 2005
-Actors: [Ethan Hawke, Laurence Fishburne, Gabriel Byrne, Maria Bello, Drea de Matteo, John Leguizamo, Brian Dennehy, Ja Rule, Currie Graham, Aisha Hinds, Peter Bryant, Matt Craven, Fulvio Cecere, Kim Coates, Hugh Dillon, Tig Fong, Dorian Harewood, Arnold Pinnock, Edward A. Queffelec, Ray Kahnert, DTeflon, Jasmin Geljo, Philip Marshall, Robert Hayley]
-Director: Jean-Franu00e7ois Richet
+Actors: [Ethan Hawke, Laurence Fishburne, Gabriel Byrne, Maria Bello, Drea de Matteo, John Leguizamo, Brian Dennehy, Ja Rule, Currie Graham, Aisha Hinds, Peter Bryant, Matt Craven, Fulvio Cecere, Kim Coates, Hugh Dillon, Tig Fong, Dorian Harewood, Arnold Pinnock, Ray Kahnert, DTeflon, Jasmin Geljo, Philip Marshall, Robert Hayley]
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -6580,7 +6580,7 @@ Genres: [Horror, Comedy]
 Title: Derailed
 Release Year: 2005
 Actors: [Clive Owen, Jennifer Aniston, Vincent Cassel, Melissa George, Addison Timlin, Xzibit, RZA, Sandra Bee, William Armstrong, Tom Conti, Rachael Blake, Richard Leaf, Catherine McCord, Denis O'Hare, Georgina Chapman, Giancarlo Esposito, David Morrissey, David Oyelowo, Jennifer Joan Taylor]
-Director: Mikael Hu00e5fstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -10171,7 +10171,7 @@ Genres: [Adventure, Fantasy, Action, Romance]
 Title: Escape Plan
 Release Year: 2013
 Actors: [Sylvester Stallone, Arnold Schwarzenegger, Jim Caviezel, Vinnie Jones, 50 Cent, Vincent D'Onofrio, Matt Gerald, Sam Neill, Christian Stokes, Lydia Hull, David Joseph Martinez, Caitriona Balfe, Amy Ryan, Faran Tahir, Steven Krueger, Jaylen Moore, James Rawlings, Alec Rayme, David Leitch, Jeff Chase, Brian Oerly, Christopher Matthew Cook, Michael Papajohn, John L. Armijo, Tim Bell, Graham Beckel, Stephen Warren, Rodney Feaster, Eric R Salas, Dieter Rauter, Stephen Livaudais, Jay Amor, Joseph Aviel, Rex Baker, Joseph Blackstone, Johnnie Brannon]
-Director: Mikael Hu00e5fstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -13096,7 +13096,7 @@ Genres: [Horror, Thriller]
 Title: The Hoax
 Release Year: 2006
 Actors: [Richard Gere, Alfred Molina, Marcia Gay Harden, Hope Davis, Julie Delpy, Stanley Tucci, David Aaron Baker, Mamie Gummer, Zeljko Ivanek, Eli Wallach, Myk Watford, John Bedford Lloyd, Peter McRobbie, John Carter, James Biberi, Christopher Evan Welch, Raul Julia Jr., Judi Barton, Milton Buras, Okwui Okpokwasili, Bob Wiltfong, William Fowle, Carlton Wilborn, Antonie Knoppers, Steve Buck, Eric Yellin, John Rothman]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -14149,7 +14149,7 @@ Genres: [Thriller, Horror]
 Title: Man on the Moon
 Release Year: 1999
 Actors: [Jim Carrey, Courtney Love, Bob Zmuda, Danny DeVito, Gerry Becker, Leslie Lyles, Greyson Erik Pendry, George Shapiro, Vincent Schiavelli, Paul Giamatti, Christopher Lloyd, Jeff Conaway, Patton Oswalt, Pamela Abdy, David Koechner, Jerry Lawler, Jim Ross]
-Director: Milou0161 Forman
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -14995,7 +14995,7 @@ Genres: [Action, Thriller, Science Fiction, Horror]
 Title: An Unfinished Life
 Release Year: 2005
 Actors: [Robert Redford, Jennifer Lopez, Morgan Freeman, Becca Gardner, Josh Lucas, Damian Lewis, Camryn Manheim, Lynda Boyd, Rob Hayter, P. Lynn Johnson, Byron Lucas, Trevor Moss, R. Nelson Brown, Dillard Brinson, Jason Diablo]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -16641,7 +16641,7 @@ Genres: [Thriller]
 --------------------------------------------------
 Title: Zoolander 2
 Release Year: 2016
-Actors: [Ben Stiller, Owen Wilson, Will Ferrell, Penelope Cruz, Kristen Wiig, Fred Armisen, Kyle Mooney, Milla Jovovich, Christine Taylor, Justin Theroux, Nathan Lee Graham, Cyrus Arnold, Billy Zane, Jon Daly, Sting, Benedict Cumberbatch, Beck Bennett, Jerry Stiller, Olivia Munn, Kanye West, Justin Bieber, Kim Kardashian, Ariana Grande, Lenny Kravitz, Demi Lovato, Kiefer Sutherland, Katy Perry, John Malkovich, Joe Jonas, Lenny Kravitz, Anna Wintour, Naomi Campbell, Neil deGrasse Tyson, Kate Moss, Lewis Hamilton, Susan Boyle, Tommy Hilfiger, M.C. Hammer, Susan Sarandon, Johnny Weir, Willie Nelson, Christina Hendricks, Andy Dick, Rakim Mayers, Jourdan Dunn, Ana Beatriz Barros, Mika, Skrillex, Marc Jacobs, Karlie Kloss, Alexander Wang, Valentino, Katie Couric, Christine Amanpour, Jane Pauley, Natalie Morales, Soledad Ou2019Brien, Don Lemon, Matt Lauer, Andy Dick, Amy Stiller, Charlotte Townsend, Mitch Winston, Fabiano Di Leo, Mamy Camara, Haruhiko Yamanouchi, Antonio Te Maioha, Yama, Moshe Kasher, Christine Thollefsen, Fran Mills, Pierpaolo Piccioli, Fat Jewish, Giordana Pieri, Olivier Langhendries, Antonio Calalani, Alexander Schuster, Bha Diop, Taigen Kawabe, Yuki Tsuji, Kohhei Matsuda, Monchhan Monna, Franca Sozzani, Joe Jonas, Eleonora Carisi, Diane Pernet, Trudie Styler, Leila Yavari, Nazanin Boniadi, Thiago Macedo, Maki Besea, Elettra Capuano, Gionata Curreri, Elga Enardu, Serena Enardu, Sissi Hou, Orlando Orfeo, Lucia Guzzardi, Martin Saints, Davide Clivio, Kelly Aaron, Christopher Cagle, Marko Caka, Alan Cappelli Goetz, Clinton Clark, Marisol Correa, Carlijn de Jong, Kristen Fick, Antony Hagopian, Ray Hounsell, Romuald Andrzej Klos, Aly Mang, Dorry Marie, Dov Markowich, Doris McCarthy, Justin McGriff, Josh Ostrovsky, Skye Stracke, Eugenia Tempesta]
+Actors: [Ben Stiller, Owen Wilson, Will Ferrell, Penelope Cruz, Kristen Wiig, Fred Armisen, Kyle Mooney, Milla Jovovich, Christine Taylor, Justin Theroux, Nathan Lee Graham, Cyrus Arnold, Billy Zane, Jon Daly, Sting, Benedict Cumberbatch, Beck Bennett, Jerry Stiller, Olivia Munn, Kanye West, Justin Bieber, Kim Kardashian, Ariana Grande, Lenny Kravitz, Demi Lovato, Kiefer Sutherland, Katy Perry, John Malkovich, Joe Jonas, Lenny Kravitz, Anna Wintour, Naomi Campbell, Neil deGrasse Tyson, Kate Moss, Lewis Hamilton, Susan Boyle, Tommy Hilfiger, M.C. Hammer, Susan Sarandon, Johnny Weir, Willie Nelson, Christina Hendricks, Andy Dick, Rakim Mayers, Jourdan Dunn, Ana Beatriz Barros, Mika, Skrillex, Marc Jacobs, Karlie Kloss, Alexander Wang, Valentino, Katie Couric, Christine Amanpour, Jane Pauley, Natalie Morales, Don Lemon, Matt Lauer, Andy Dick, Amy Stiller, Charlotte Townsend, Mitch Winston, Fabiano Di Leo, Mamy Camara, Haruhiko Yamanouchi, Antonio Te Maioha, Yama, Moshe Kasher, Christine Thollefsen, Fran Mills, Pierpaolo Piccioli, Fat Jewish, Giordana Pieri, Olivier Langhendries, Antonio Calalani, Alexander Schuster, Bha Diop, Taigen Kawabe, Yuki Tsuji, Kohhei Matsuda, Monchhan Monna, Franca Sozzani, Joe Jonas, Eleonora Carisi, Diane Pernet, Trudie Styler, Leila Yavari, Nazanin Boniadi, Thiago Macedo, Maki Besea, Elettra Capuano, Gionata Curreri, Elga Enardu, Serena Enardu, Sissi Hou, Orlando Orfeo, Lucia Guzzardi, Martin Saints, Davide Clivio, Kelly Aaron, Christopher Cagle, Marko Caka, Alan Cappelli Goetz, Clinton Clark, Marisol Correa, Carlijn de Jong, Kristen Fick, Antony Hagopian, Ray Hounsell, Romuald Andrzej Klos, Aly Mang, Dorry Marie, Dov Markowich, Doris McCarthy, Justin McGriff, Josh Ostrovsky, Skye Stracke, Eugenia Tempesta]
 Director: Ben Stiller
 Writer: Nicholas Stoller
 Cinematographer: null
@@ -16840,7 +16840,7 @@ Genres: [Documentary]
 Title: Lost Souls
 Release Year: 2000
 Actors: [Winona Ryder, Ben Chaplin, Sarah Wynter, Philip Baker Hall, John Hurt, Elias Koteas, John Diehl, Alfre Woodard, Victor Slezak, John Beasley, Bob Clendenin, Michael Mantell, Brad Greenquist, Ming Lo, Anna Gunn, W. Earl Brown, Cyd Strittmatter, James Lancaster, Ashley Edner, Connie Ray, Jamie Denbo]
-Director: Janusz Kamiu0144ski
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -19720,7 +19720,7 @@ Genres: [Comedy, Fantasy, Romance]
 Title: 1911
 Release Year: 2011
 Actors: [Jackie Chan, Li Bingbing, Joan Chen, Jaycee Chan, Sun Chun, Jiang Wu, Hu Ge, Ning Jing, Winston Chao, Yu Shao-Qun, Dennis To Yue-Hong, Huang Zhizhong, Mei Ting, Simon Dutton, James Lee Guy, Li Dongxue, Wang Zi Wen, Wei Zongwan, Xie Gang, Tao Zeru, Xing Jiadong, Wang Lu-Yao]
-Director: u5f20u7acb | Zhang Li
+Director: Jackie Chan
 Writer: Chen Bao-Guang
 Cinematographer: null
 Composer: null
@@ -20043,7 +20043,7 @@ Genres: [Comedy]
 --------------------------------------------------
 Title: Maximum Risk
 Release Year: 1996
-Actors: [Jean-Claude Van Damme, Natasha Henstridge, Jean-Hugues Anglade, Zach Grenier, Paul Ben-Victor, Frank Senger, Dan Moran, Donald Burda, Stefanos Miltsakakis, Frank Van Keeken, David Hemblen, Rob Kaman, Herb Lovelle, Albert Schultz, Branko Racki, Kamel Krifa, Brian Jagersky, Irene Pauzer, Carlo Rota, Joe Pingue, Hugh Thompson, Gloria Slade, Jackie Richardson, Ed Sahely, Dan Duran, Raymond Accolas, Kedar Brown, Claire Cellucci, John Bayliss, Henry Gomez, John Nelles, Kevin Rushton, Sharon Bernbaum, David Christoffel, James Millington, Edward A. Queffelec, Ron Van Hart, Brian Kaulback]
+Actors: [Jean-Claude Van Damme, Natasha Henstridge, Jean-Hugues Anglade, Zach Grenier, Paul Ben-Victor, Frank Senger, Dan Moran, Donald Burda, Stefanos Miltsakakis, Frank Van Keeken, David Hemblen, Rob Kaman, Herb Lovelle, Albert Schultz, Branko Racki, Kamel Krifa, Brian Jagersky, Irene Pauzer, Carlo Rota, Joe Pingue, Hugh Thompson, Gloria Slade, Jackie Richardson, Ed Sahely, Dan Duran, Raymond Accolas, Kedar Brown, Claire Cellucci, John Bayliss, Henry Gomez, John Nelles, Kevin Rushton, Sharon Bernbaum, David Christoffel, James Millington, Ron Van Hart, Brian Kaulback]
 Director: Ringo Lam
 Writer: null
 Cinematographer: null
@@ -20538,7 +20538,7 @@ Genres: [Mystery, Adventure, Comedy, Romance, Drama]
 --------------------------------------------------
 Title: Hotel Transylvania
 Release Year: 2012
-Actors: [Adam Sandler, Steve Buscemi, David Spade, Kevin James, Selena Gomez, Andy Samberg, Fran Drescher, Molly Shannon, Cee Lo Green, Jon Lovitz, Rick Kavanian, Elyas Mu2019Barek, Sadie Sandler, Jackie Sandler, Brian Stack, Chris Parnell, Robert Smigel, Rob Riggle, Paul Brittain, Brian McCann, Jonny Solomon, Jim Wise, James C.J. Williams]
+Actors: [Adam Sandler, Steve Buscemi, David Spade, Kevin James, Selena Gomez, Andy Samberg, Fran Drescher, Molly Shannon, Cee Lo Green, Jon Lovitz, Rick Kavanian, Sadie Sandler, Jackie Sandler, Brian Stack, Chris Parnell, Robert Smigel, Rob Riggle, Paul Brittain, Brian McCann, Jonny Solomon, Jim Wise, James C.J. Williams]
 Director: Genndy Tartakovsky
 Writer: Dan Hageman
 Cinematographer: null
@@ -22195,7 +22195,7 @@ Genres: [Drama, Romance, Thriller]
 Title: 1408
 Release Year: 2007
 Actors: [John Cusack, Samuel L. Jackson, Mary McCormack, Jasmine Jessica Anthony, Tony Shalhoub, Alexandra Silber, Emily Harvey, Noah Lee Margetts, William Armstrong, Paul Birchard, Margot Leicester, Angel Oquendo, Walter Lewis, Eric Meyers, David Nicholson, Holly Hayes, Johann Urb, Andrew-Lee Potts, Kim Thomson, Drew Powell, Gil Cohen-Alloro, Isiah Whitlock Jr., Benny Urquidez, Len Cariou, Ray Nicholas, Tina Maskell, Paul Kasey, George Cottle, Julian Spencer, William Willoughby, Thomas A. McMahon, Anthony C. Mazza, Chris Carey, Kevin Dobson, Peter Conboy, Georgie Lee-Robinson, Bernadette Lords, Rob McGillivray, Kate Walsh, Jacob White]
-Director: Mikael Hu00e5fstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -23950,7 +23950,7 @@ Genres: [Documentary, Music]
 Title: Underworld: Awakening
 Release Year: 2012
 Actors: [Kate Beckinsale, Stephen Rea, Michael Ealy, Theo James, India Eisley, Charles Dance, Sandrine Holt, Sanny van Heteren, Jacob Blair, Robert Lawrenson, Kurt Max Runte, Marvin Duerkholz, Ron Wear, Richard Cetrone, Dan Payne, Mark Gibbon, Benita Ha, Tyler McClendon, Panou, Ian Rozylo, Kristen Holden-Ried, John Innes, Lee Majdoub, Catlin Adams, Adam Greydon Reid, Christian Tessier, Wes Bentley, Scott Speedman, Sanny van Heteren, Joe Censoplano, Preston Cook]
-Director: Bju00f6rn Stein
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -27587,7 +27587,7 @@ Title: Oceans
 Release Year: 2009
 Actors: [Pierce Brosnan, Jacques Perrin, Rie Miyazawa, Aldo Baglio, Matthias Brandt, Lancelot Perrin, Manolo Garcia, Pedro Armendariz Jr.]
 Director: Jacques Cluzaud
-Writer: Franu00e7ois Sarano
+Writer: Laurent Gaude
 Cinematographer: null
 Composer: null
 Genres: [Documentary, Family]
@@ -31861,8 +31861,8 @@ Genres: [Comedy]
 Title: Alatriste
 Release Year: 2006
 Actors: [Viggo Mortensen, Elena Anaya, Unax Ugalde, Eduard Fernandez, Eduardo Noriega, Ariadna Gil, Juan Echanove, Javier Camara, Antonio Dechent, Blanca Portillo, Francesc Garrido, Pilar Lopez de Ayala, Cristina Marcos, Luis Zahera, Carlos Bardem]
-Director: Agustu00edn Du00edaz Yanes
-Writer: Agustu00edn Du00edaz Yanes
+Director: null
+Writer: null
 Cinematographer: null
 Composer: null
 Genres: [Action]
@@ -36136,7 +36136,7 @@ Genres: [Drama]
 Title: The Shipping News
 Release Year: 2001
 Actors: [Kevin Spacey, Julianne Moore, Cate Blanchett, Judi Dench, Pete Postlethwaite, Scott Glenn, Rhys Ifans, Gordon Pinsent, Jason Behr, Katherine Moennig, Larry Pine, Jeannetta Arnette]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -36226,7 +36226,7 @@ Genres: [Horror, Thriller]
 Title: Safe Haven
 Release Year: 2013
 Actors: [Julianne Hough, Josh Duhamel, Cobie Smulders, David Lyons, Mike Pniewski, Noah Lomax, Mimi Kirkland, Juan Piedrahita, Robin Mullins, Irene Ziegler, Daniel Cochran Donovan, Tim Parati, Jon Kohler, Jasper Grey, Giulia Pagano, Nick Basta, Ric Reitz, Cullen Moss, James Nalitz, Jan Hartsell]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -36793,7 +36793,7 @@ Genres: [Documentary]
 Title: Dear John
 Release Year: 2010
 Actors: [Amanda Seyfried, Channing Tatum, Henry Thomas, Richard Jenkins, Scott Porter, Keith Robinson, Luke Benward, David Andrews, D.J. Cotrona]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -38359,7 +38359,7 @@ Genres: [Adventure, Action, Science Fiction]
 Title: The Hundred-Foot Journey
 Release Year: 2014
 Actors: [Helen Mirren, Manish Dayal, Om Puri, Charlotte Le Bon, Rohan Chand, Juhi Chawla, Farzana Dua Elahe, Dillon Mitra, Jean Kinsell, Amit Shah, Aria Pandya, Michel Blanc, Clement Sibony, Vincent Elbaz, Alban Aumard, Shuna Lemoine, Antoine Blanquefort, Malcolm Granath, Abhijit Buddhisagar, Masood Akhtar, Arthur Mazet, Laetitia de Fombelle, Cedric Weber, Piero Filippi, Robert Gailhard, Matyelok Gibbs, Paul Daubeze, Didier Joy, Max Rangotte, Saachi Parekh, Shaunak Parekh, Stephanie Renouvin, Audrey Meschi, Christian Allieres, Patrick Blatger, Frederic Violante, Chantal Filippi, Sanjay Sharma, Morgan Perez]
-Director: Lasse Hallstru00f6m
+Director: null
 Writer: null
 Cinematographer: null
 Composer: null
@@ -38872,7 +38872,7 @@ Genres: [Drama]
 Title: The Rite
 Release Year: 2011
 Actors: [Anthony Hopkins, Colin O'Donoghue, Alice Braga, Toby Jones, Ciaran Hinds, Rutger Hauer, Marta Gastini, Maria Grazia Cucinotta, Arianna Veronesi, Andrea Calligari, Chris Marquette, Ben Cheetham]
-Director: Mikael Hu00e5fstru00f6m
+Director: null
 Writer: Michael Petroni
 Cinematographer: null
 Composer: null
@@ -41823,7 +41823,7 @@ Genres: [Action, Science Fiction]
 --------------------------------------------------
 Title: Untraceable
 Release Year: 2008
-Actors: [Diane Lane, Billy Burke, Colin Hanks, Joseph Cross, Mary Beth Hurt, Peter Lewis, Perla Haney-Jardine, Tim DeZam, Christopher Cousins, Jesse Tyler Ferguson, Brynn Baron, John Breen, Dan Callahan, Tyrone Giordano, Erin Carufel, Ryan Deal, Betty Moyer, Katie Ou2019Grady]
+Actors: [Diane Lane, Billy Burke, Colin Hanks, Joseph Cross, Mary Beth Hurt, Peter Lewis, Perla Haney-Jardine, Tim DeZam, Christopher Cousins, Jesse Tyler Ferguson, Brynn Baron, John Breen, Dan Callahan, Tyrone Giordano, Erin Carufel, Ryan Deal, Betty Moyer]
 Director: Gregory Hoblit
 Writer: null
 Cinematographer: null

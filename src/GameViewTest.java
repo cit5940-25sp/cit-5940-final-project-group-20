@@ -1,3 +1,4 @@
+
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -24,6 +25,8 @@ import static org.junit.Assert.*;
  * I downloaded to simulate user input related testing and
  * GUI related stuff
  */
+
+
 public class GameViewTest {
 
     private GameView gameView;

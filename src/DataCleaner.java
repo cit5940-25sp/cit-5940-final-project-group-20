@@ -16,14 +16,17 @@ public class DataCleaner {
         result = result.replaceAll("u0440", "p");
         result = result.replaceAll("u044C", "b");
 
+        //additional fixes
+        result = result.replaceAll("u044C", "b");
+
 
         return result;
     }
 
-    public static boolean hasWeirdChar(String orgional){
-        Pattern p = Pattern.compile("u0[0-9abcdefABCDEF]{3}");
-        Matcher m = p.matcher(orgional);
-        return (m.find());
+    public static boolean hasWeirdChar(String original) {
+        Pattern p = Pattern.compile("u[0-9a-fA-F]{4}");
+        Matcher m = p.matcher(original);
+        return m.find();
     }
 
 
