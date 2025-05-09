@@ -45,17 +45,17 @@ public class MovieNameGame {
 
                 playAgain = view.promptRestart();
 
-                // TESTING SHOWING END MESSAGE!
+                // Displays thank you message
                 if (!playAgain) {
                     view.showThankYouMessage();
                 }
 
-                // TEST: FLUSH
+                // TEST: FLUSH - not sure if we need it but I took it out
                 // while (view.pollInput() != null) {}
 
             } while (playAgain);
         } finally {
-            view.closeScreen();  // restores terminal
+            view.closeScreen();  // restoreing the terminal
         }
     }
 }

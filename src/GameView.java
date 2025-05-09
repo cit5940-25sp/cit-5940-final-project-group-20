@@ -644,10 +644,7 @@ public class GameView {
         }
     }
 
-    /**
-     * Displays a thank you message at the end of the game,
-     * using a stylized frame and pausing briefly before closing the terminal.
-     */
+
     /**
      * Displays a visually styled thank-you message using ASCII art.
      */
