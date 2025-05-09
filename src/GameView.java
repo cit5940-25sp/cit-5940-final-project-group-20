@@ -1,7 +1,6 @@
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -94,7 +93,7 @@ public class GameView {
     }
 
     /**
-     * Closes the terminal screen and releases resources.
+     * Closes the terminal screen
      */
     public void closeScreen() {
         try {
@@ -105,7 +104,7 @@ public class GameView {
     }
 
     /**
-     * Non-blocking poll for user keyboard input.
+     * Polling for user input
      *
      * @return the KeyStroke pressed or {@code null} if no input
      */
