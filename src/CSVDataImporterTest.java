@@ -14,6 +14,87 @@ public class CSVDataImporterTest {
         assertEquals("Harry Potter and the Half-Blood Prince", t.getTitle());
         assertEquals(2009, t.getReleaseYear());
     }
+
+    @org.junit.Test
+    public void importDataNoFile() {
+        try {
+            CSVDataImporter importer = new CSVDataImporter();
+            Map<Integer, Movie> temp = importer.importDataMovie("wrong.csv");
+            fail("expected fail");
+        }
+        catch(RuntimeException e){
+            assertTrue(e.getMessage().contains("No such file or directory"));
+        }
+
+    }
+
+    @org.junit.Test
+    public void importCreditNoFile() {
+        try {
+            CSVDataImporter importer = new CSVDataImporter();
+            HashMap<Integer, Movie> movie = new HashMap<>();
+            Map<Integer, Movie> temp = importer.importDataCredit("wrong.csv", movie);
+            fail("expected fail");
+        }
+        catch(RuntimeException e){
+            assertTrue(e.getMessage().contains("No such file or directory"));
+        }
+
+    }
+
+    @org.junit.Test
+    public void importDataEmptyFile() {
+            CSVDataImporter importer = new CSVDataImporter();
+            Map<Integer, Movie> temp = importer.importDataMovie("testempty.csv");
+            assertTrue(temp.isEmpty());
+    }
+
+    @org.junit.Test
+    public void importDataInvalidGenreFile() {
+        CSVDataImporter importer = new CSVDataImporter();
+        Map<Integer, Movie> temp = importer.importDataMovie("testgenre.csv");
+        assertTrue(temp.isEmpty());
+    }
+
+    @org.junit.Test
+    public void importDataInvalidDateFile() {
+        CSVDataImporter importer = new CSVDataImporter();
+        Map<Integer, Movie> temp = importer.importDataMovie("testdate.csv");
+        assertTrue(temp.isEmpty());
+    }
+
+    @org.junit.Test
+    public void importDataInvalidCastFile() {
+        CSVDataImporter importer = new CSVDataImporter();
+        HashMap<Integer, Movie> movies = new HashMap<>();
+        Movie movie = new Movie("Avatar", 2000, new ArrayList<>(), "Director", "Writer", "Cinematographer", "Composer", new ArrayList<>());
+        movies.put(19995, movie);
+        assertFalse(movies.isEmpty());
+        Map<Integer, Movie> temp = importer.importDataCredit("testcast.csv", movies);
+        assertTrue(temp.isEmpty());
+    }
+
+    @org.junit.Test
+    public void importDataInvalidCrewFile() {
+        CSVDataImporter importer = new CSVDataImporter();
+        HashMap<Integer, Movie> movies = new HashMap<>();
+        Movie movie = new Movie("Avatar", 2000, new ArrayList<>(), "Director", "Writer", "Cinematographer", "Composer", new ArrayList<>());
+        movies.put(19995, movie);
+        assertFalse(movies.isEmpty());
+        Map<Integer, Movie> temp = importer.importDataCredit("testcrew.csv", movies);
+        assertTrue(temp.isEmpty());
+    }
+    @org.junit.Test
+    public void importDataNoRealIDFile() {
+        CSVDataImporter importer = new CSVDataImporter();
+        HashMap<Integer, Movie> movies = new HashMap<>();
+        Movie movie = new Movie("Avatar", 2000, new ArrayList<>(), "Director", "Writer", "Cinematographer", "Composer", new ArrayList<>());
+        movies.put(19995, movie);
+        assertFalse(movies.isEmpty());
+        Map<Integer, Movie> temp = importer.importDataCredit("testnorealID.csv", movies);
+        assertFalse(temp.isEmpty());
+    }
+
     @org.junit.Test
     public void importCredit() {
         CSVDataImporter importer = new CSVDataImporter();

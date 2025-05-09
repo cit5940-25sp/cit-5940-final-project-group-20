@@ -17,8 +17,9 @@ public class CSVDataImporter implements IDataImporter {
     @Override
     public Map<Integer, Movie> importDataMovie(String file) {
         Map<Integer, Movie> hash = new HashMap<>();
-        try (CSVReader reader = new CSVReader(new FileReader(file))) {
+        try {
             String[] header;
+            CSVReader reader = new CSVReader(new FileReader(file));
             try {
                 try {
                     header = reader.readNext();
@@ -61,9 +62,15 @@ public class CSVDataImporter implements IDataImporter {
                     rowNumber++;
                     continue;
                 }
+                //not expecting any wording problems so no additional checking
 
 
                 String title = nextLine[17];
+                //cleaning title
+                title = DataCleaner.clean(title);
+                if(DataCleaner.hasWeirdChar(title)){
+                    continue;
+                }
                 String releasedate = nextLine[11];
                 if (releasedate.length() == 0) {
                     rowNumber++;
@@ -98,7 +105,7 @@ public class CSVDataImporter implements IDataImporter {
 
         } catch (IOException e) {
             System.err.println("Error reading the CSV file: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return hash;
     }
@@ -148,7 +155,7 @@ public class CSVDataImporter implements IDataImporter {
                     continue;
                 }
 
-                int id = Integer.parseInt(nextLine[0]);
+                int id;
                 try {
                     id = Integer.parseInt(nextLine[0]);
                 } catch (NumberFormatException e) {
@@ -199,8 +206,13 @@ public class CSVDataImporter implements IDataImporter {
                 String composer = null;
 
                 for (int i = 0; i < crewarray.length(); i++) {
+                    //cleaning
                     String crewname = DataCleaner.clean(((JSONObject) crewarray.get(i)).getString("name"));
                     String crewjob = DataCleaner.clean(((JSONObject) crewarray.get(i)).getString("job"));
+                    //if weird char skip
+                    if(DataCleaner.hasWeirdChar(crewname)){
+                        continue;
+                    }
                     if (crewjob.equalsIgnoreCase("director")) {
                         director = crewname;
                         continue;
@@ -215,7 +227,6 @@ public class CSVDataImporter implements IDataImporter {
                     }
                     if (crewjob.equalsIgnoreCase("composer")) {
                         composer = crewname;
-                        continue;
                     }
                 }
                 movies.get(id).setActors(actors);
@@ -229,7 +240,7 @@ public class CSVDataImporter implements IDataImporter {
 
         } catch (IOException e) {
             System.err.println("Error reading the CSV file: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return movies;
     }

@@ -1,19 +1,22 @@
 import java.util.Comparator;
 
 /**
- * @author ericfouh
+ * Shows a searchable term related to movie - reworked from autocomplete homework
+ * Terms can be compared in 2 ways, lexicographically or by a prefix
+ * This interface is implemented by class Term {@code Term}
+ *
  */
 public interface ITerm
         extends Comparable<ITerm> {
 
-
-
     /**
-     * Compares the two terms in lexicographic order but using only the first r
-     * characters of each query.
+     * Returns comparator that compares terms with their prefix length
+     * Terms are compared by lexicographic order by the first characters of string
+     * If a term is shorter than the parameter the full string is used
      *
-     * @param r
-     * @return comparator Object
+     * @param r the number of chars used for comparator
+     * @return a Comparator that compares terms with prefix order
+     * @throws IllegalArgumentException if r is negative
      */
     public static Comparator<ITerm> byPrefixOrder(int r) {
         if (r < 0) {
@@ -22,6 +25,9 @@ public interface ITerm
         return new ByPrefixOrder(r);
     }
 
+    /**
+     * A comparator that compares the terms by the first number of {@code r} characters in the strings
+     */
     public class ByPrefixOrder implements Comparator<ITerm> {
         int r;
         public ByPrefixOrder(int r) {
@@ -40,20 +46,37 @@ public interface ITerm
     }
 
 
-    // Compares the two terms in lexicographic order by query.
+    /**
+     * Compares this term with the specified that term looking for the order
+     * Returns a negative integer, zero, or a positive integer as this term is less than,
+     * equal to, or greater than the that term in lexicographical order
+     *
+     * @param that the other ITerm to we compare it to
+     * @return an int that shows the result of comparing the terms lexicographically
+     */
     public int compareTo(ITerm that);
 
-
-
+    /**
+     * Returns a string of term
+     *
+     * @return string of the term
+     */
     public String toString();
 
-    // Required getters.
+    /**
+     * Returns Movie object related to this term
+     *
+     * @return the related Movie
+     */
     public Movie getMovie();
+
+    /**
+     * Returns the term string
+     *
+     * @return the term string
+     */
     public String getTerm();
 
-    // Required setters (mostly for autograding purposes)
-    public Movie setMovie(Movie movie);
-    public String setTerm(String term);
 
 }
 
