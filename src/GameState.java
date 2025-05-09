@@ -120,6 +120,7 @@ public class GameState {
         return playedMovies;
     }
 
+
     /**
      * Updates the game state by setting the next movie and recording the connection type.
      * Also adds the connection to history and updates connection usage.
@@ -162,6 +163,16 @@ public class GameState {
      */
     public int getConnectionUsage(String connectionType) {
         return connectionUsageCount.getOrDefault(connectionType, 0);
+    }
+
+    /**
+     * Checks if the specified connection type can be used (max 3 allowed).
+     *
+     * @param connectionType the connection strategy name (e.g., "Director")
+     * @return true if it can still be used and false if limit reached
+     */
+    public boolean canUseConnection(String connectionType) {
+        return getConnectionUsage(connectionType) < 3;
     }
 
     /**

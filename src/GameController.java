@@ -245,8 +245,18 @@ public class GameController {
 
 
         boolean isValidMove = false;
+        boolean connectionOverused = false;
         for (ConnectionStrategy connection : connectionStrategies) {
+            String connectType = connection.getType(); // extracts the connection type
+
             if (connection.areConnected(gameState.getCurrentMovie(), nextMovie)) {
+
+                if (!gameState.canUseConnection(connectType)) {
+                    //gameView.showMessageAndPause("The '" + connectType + "' connection has already been used 3 times!");
+                    connectionOverused = true;
+                    break;  // need to make sure this reprompts user!!
+                }
+
                 isValidMove = true;
                 Player currentPlayer = gameState.getCurrentPlayer();
                 gameState.addPlayedMovie(nextMovie);
@@ -267,10 +277,13 @@ public class GameController {
             gameView.showMessageAndPause("Nice move! Connected");
             endTurnAndSwitchPlayer();
             startTurn();
-        } else {
-            gameView.showMessageAndPause("Invalid connection. Try again.");
+        } else if (connectionOverused) {
+            gameView.showMessageAndPause("That connection type has already been used 3 times!");
+            } else {
+                gameView.showMessageAndPause("Invalid connection. Try again.");
         }
     }
+
     /**
      * Ends the current player's turn, switches to the next player,
      * and increments the round.
