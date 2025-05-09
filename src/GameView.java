@@ -125,7 +125,7 @@ public class GameView {
      */
     public void updatePlayerInput(String currentInput) {
         // Overwrite the input line
-        printString(10, 27, "                                      "); // Clear old input
+        printString(10, 27, " ".repeat(80)); // Clear the full line
         printString(10, 27, currentInput); // Print new input
     }
 
