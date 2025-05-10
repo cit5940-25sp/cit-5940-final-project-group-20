@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for {@code ActorWinCondition}, which checks if a player
+ * has played enough movies by a specific Actor to satisfy a win condition.
+ */
 public class ActorWinConditionTest {
 
     private Player player;

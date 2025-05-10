@@ -3,6 +3,7 @@
  * Two movies are considered connected if they have the same director.
  */
 public class DirectorConnection implements ConnectionStrategy {
+
     /**
      * Determines whether two movies are connected by having the same director.
      * This comparison is case-insensitive.
@@ -23,6 +24,7 @@ public class DirectorConnection implements ConnectionStrategy {
 
         return directorA.equalsIgnoreCase(directorB);
     }
+
     /**
      * Returns the type of connection this strategy represents.
      *
@@ -34,12 +36,20 @@ public class DirectorConnection implements ConnectionStrategy {
     }
 
 
+    /**
+     * Returns the shared director name if both movies are connected via director.
+     * If the movies have the same director,
+     * method returns director's name.
+     * Otherwise, it returns {@code null}.
+     *
+     * @param a the first movie
+     * @param b the second movie
+     * @return the shared director's name if connected; {@code null} otherwise
+     */
     @Override
     public String getSharedElement(Movie a, Movie b) {
         String dirA = a.getDirector();
         String dirB = b.getDirector();
         return (dirA != null && dirB != null && dirA.equalsIgnoreCase(dirB)) ? dirA : null;
     }
-
-
 }

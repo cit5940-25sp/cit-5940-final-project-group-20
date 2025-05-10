@@ -201,9 +201,6 @@ public class MovieDatabase {
                 }
             }
         }
-    
         return null; // Just in case
     }
-    
-
 }

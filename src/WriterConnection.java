@@ -35,12 +35,20 @@ public class WriterConnection implements ConnectionStrategy {
         return "Writer";
     }
 
-    @Override
+     /**
+     * Retrieves the shared writer between two movies if they are the same.
+     * <p>
+     * Checks whether both movies have a non-null writer and if the writer's name
+     * matches exactly. If they do, it returns the shared writer's name; otherwise, returns {@code null}.
+     *
+     * @param a the first movie to compare
+     * @param b the second movie to compare
+     * @return
+     * */
+     @Override
     public String getSharedElement(Movie a, Movie b) {
         String writerA = a.getWriter();
         String writerB = b.getWriter();
         return (writerA != null && writerB != null && writerA.equals(writerB)) ? writerA : null;
     }
-
-
 }
