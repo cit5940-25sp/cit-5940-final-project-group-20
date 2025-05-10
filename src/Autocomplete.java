@@ -3,19 +3,29 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Implements autocomplete using a trie (prefix tree)
+ * Implements autocomplete using trie - reworked version from the Homework Autocomplete
  *
- * This class supports insertion of words associated with Movie objects
- * and provides efficient prefix-based lookup and suggestion functionality.
- * It is case-insensitive and ignores invalid characters (non-ASCII).
+ * The class supports prefix-based lookup and suggestion functionality using {@link Movie} objects
+ * It is case-insensitive and uses at the 256 ASCII chars
+ * Implements the ITerm {@code ITerm} interface
  */
 public class Autocomplete implements IAutocomplete {
     private Node root;
 
+    /**
+     * Constructs an empty Autocomplete trie with a newly created root node
+     */
     public Autocomplete() {
         this.root = new Node();
     }
 
+    /**
+     * Adds a new word associated with movie to the trie structure
+     * But if it has non-valid Chars it is being ignored
+     *
+     * @param word  the word to add
+     * @param movie the movie connected to word
+     */
     @Override
     public void addWord(String word, Movie movie) {
         //checking if word is valid -> letters only
@@ -53,19 +63,19 @@ public class Autocomplete implements IAutocomplete {
 
     }
     /**
-     * Returns root node of trie
+     * Returns the root node of the created trie
      *
-     * @return root node
+     * @return the root node
      */
     public Node getRoot() {
         return this.root;
     }
 
     /**
-     * Checks if a word is valid with only ASCII chars
+     * Checks if a word contains valid Chars (all 256 ASCII)
      *
-     * @param word the string to check
-     * @return true if all chars are valid otherwise false
+     * @param word the word we are checking
+     * @return {@code true} if all chars are valid 256 ASCII, {@code false} otherwise
      */
     public boolean validChars(String word) {
         for (int i = 0; i < word.length(); i++) {
@@ -79,11 +89,10 @@ public class Autocomplete implements IAutocomplete {
     }
 
     /**
-     * Builds the trie from a collection of Movie objects.
-     * Each movie's searchable title is added to the trie.
+     * Builds trie by adding searchable titles from a movie collection
      *
      * @param movies the collection of movies to add
-     * @return the root node of the completed trie
+     * @return the root node of created trie
      */
     @Override
     public Node buildTrie(Collection<Movie> movies) {
@@ -98,13 +107,13 @@ public class Autocomplete implements IAutocomplete {
     }
 
     /**
-     * Retrieves the sub-trie rooted at the end of the given prefix.
+     * Returns the node matching to the last char of the given prefix
+     * Returns {@code null} if in the prefix there are unvalid chars
      *
-     * Returns null if the prefix is not found or contains invalid characters.
-     *
-     * @param prefix the prefix to search for
-     * @return the node representing the end of the prefix path, or null if not found
+     * @param prefix the prefix to look up
+     * @return the currentnode or {@code null} if not found
      */
+
     @Override
     public Node getSubTrie(String prefix) {
         Node currentnode = root;
@@ -126,10 +135,11 @@ public class Autocomplete implements IAutocomplete {
 
 
     /**
-     * Retrieves all complete words in the trie that start with the given prefix.
+     * Returns list of autocomplete suggestions for a Sting prefix
+     * If there are no matches, empty list will be returned
      *
      * @param prefix the prefix to search for
-     * @return a list of ITerm suggestions matching the prefix
+     * @return a list of {@link ITerm} objects that have matching prefix
      */
     @Override
     public List<ITerm> getSuggestions(String prefix) {
@@ -146,10 +156,10 @@ public class Autocomplete implements IAutocomplete {
     }
 
     /**
-     * Recursively traverses the trie from the given node to collect complete terms.
+     * Recursive function that adds together complete terms from trie
      *
-     * @param currentnode  the current node in traversal
-     * @param suggestions  the list to accumulate matching terms
+     * @param currentnode the current node
+     * @param suggestions the list that we want to populate with terms that match
      */
     private void helperFunction(Node currentnode,List<ITerm> suggestions) {
         //checking if currentnode points to a complete word

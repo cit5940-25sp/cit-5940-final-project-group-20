@@ -31,6 +31,7 @@ public class Movie {
     //clean and remove title for autocomplete
     public String getSearchableTitle(){
         String searchableTitle = new String(this.title);
+        //took this out so no problem with searching title with "the"
 //        if(searchableTitle.toLowerCase().startsWith("the ")){
 //            searchableTitle = searchableTitle.substring(4);
 //        }

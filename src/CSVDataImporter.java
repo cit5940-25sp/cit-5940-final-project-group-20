@@ -12,6 +12,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Reads movie and credit data from CSV files and takes out what is needed
+ * Implements the {@link IDataImporter} interface to build a map with movie and ID
+ */
+
 public class CSVDataImporter implements IDataImporter {
 
     @Override
