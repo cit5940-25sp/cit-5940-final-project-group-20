@@ -429,7 +429,7 @@ public class GameView {
 
         // 1) Clear previous suggestions
         for (int i = 0; i < maxSuggestions; i++) {
-            printString(suggestionCol, startRow + i, " ".repeat(80));
+            printString(suggestionCol, startRow + i, " ".repeat(120));
         }
 
         // 2) Print new suggestions
