@@ -304,6 +304,5 @@ public class GameController {
      */
     private void endTurnAndSwitchPlayer() {
         gameState.switchPlayer();
-        gameState.incrementRound();
     }
 }
