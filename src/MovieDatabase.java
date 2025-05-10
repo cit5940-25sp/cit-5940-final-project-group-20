@@ -63,7 +63,12 @@ public class MovieDatabase {
 
     // Look up a movie by exact title
     public Movie getMovieByTitle(String title) {
-        return movies.get(title);
+        for (String key : movies.keySet()) {
+            if (key.equalsIgnoreCase(title)) {
+                return movies.get(key);
+            }
+        }
+        return null;
     }
 
     //AUTOCOMPLETE CHANGE- Frida
