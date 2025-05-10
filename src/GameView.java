@@ -5,6 +5,8 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.TextColor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -437,6 +439,88 @@ public class GameView {
             printString(suggestionCol, startRow + i, "- " + suggestions.get(i));
         }
     }
+
+
+    /**
+     * Displays a visually styled welcome message using ASCII art
+     */
+    public void welcomeMessage() {
+        clearScreen();
+
+        String[] message = {
+                "╔════════════════════════════════════════════════════════════════════════╗",
+                "║                                                                        ║",
+                "║              ██╗  ██╗███████╗██╗     ██╗      ██████╗                  ║",
+                "║              ██║  ██║██╔════╝██║     ██║     ██╔═══██╗                 ║",
+                "║              ███████║█████╗  ██║     ██║     ██║   ██║                 ║",
+                "║              ██╔══██║██╔══╝  ██║     ██║     ██║   ██║                 ║",
+                "║              ██║  ██║███████╗███████╗███████╗╚██████╔╝                 ║",
+                "║              ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝                  ║",
+                "║                                                                        ║",
+                "║                WELCOME TO GROUP 20's MOVIE NAME GAME!                  ║",
+                "║                                                                        ║",
+                "╚════════════════════════════════════════════════════════════════════════╝"
+        };
+
+        int startRow = 8;
+        TextGraphics tg = screen.newTextGraphics();
+
+        TextColor orange = new TextColor.RGB(255, 165, 0);
+        TextColor darkOrange = new TextColor.RGB(204, 102, 0);
+
+        try {
+            // Draw welcome message in orange
+            tg.setForegroundColor(orange);
+            for (int i = 0; i < message.length; i++) {
+                int msgLength = message[i].length();
+                int startCol = (totalWidth - msgLength) / 2;
+                tg.putString(startCol, startRow + i, message[i]);
+            }
+
+            // Refresh to display message
+            screen.refresh();
+
+            // Draw loading bar just under the box
+            int barRow = startRow + message.length + 2;
+            int barLength = 24;
+            int col = (totalWidth - (barLength + 20)) / 2;
+
+            tg.setForegroundColor(darkOrange);
+
+            tg.putString(col, barRow, "Loading Game...");
+
+            // moves cursor right
+            tg.putString(col + 15, barRow, "");
+            screen.refresh();
+            Thread.sleep(400);
+
+            // Animate the bar fill
+            for (int i = 0; i < barLength; i++) {
+                tg.putString(col + 15 + i, barRow, ".");
+                screen.refresh();
+                Thread.sleep(100);
+            }
+
+            Thread.sleep(700); // Small pause after load completes
+
+            // Fade out message and bar
+            for (int i = message.length - 1; i >= 0; i--) {
+                int msgLength = message[i].length();
+                int startCol = (totalWidth - msgLength) / 2;
+                tg.putString(startCol, startRow + i, " ".repeat(msgLength));
+                screen.refresh();
+                Thread.sleep(100);
+            }
+            tg.putString(col, barRow, " ".repeat(45)); // Clear loading bar
+            screen.refresh();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+
+
     /**
      * Prompts the users to enter names for Player 1 and Player 2 via the terminal interface.
      * <p>
@@ -667,16 +751,34 @@ public class GameView {
     };
 
         int startRow = 8;
+        // TEST
+        TextGraphics tg = screen.newTextGraphics();
 
-        for (int i = 0; i < message.length; i++) {
-            int msgLength = message[i].length();
-            int startCol = (totalWidth - msgLength) / 2;
-            printString(startCol, startRow + i, message[i]);
-        }
+        // Orange to simulate actual Cine2Nerdle Design!
+        TextColor orange = new TextColor.RGB(255, 165, 0);
+        tg.setForegroundColor(orange); // Set text color to red
 
         try {
-            Thread.sleep(9000); // Show message for 9 seconds
-        } catch (InterruptedException e) {
+            // Print the message
+            for (int i = 0; i < message.length; i++) {
+                int msgLength = message[i].length();
+                int startCol = (totalWidth - msgLength) / 2;
+                tg.putString(startCol, startRow + i, message[i]);
+            }
+            screen.refresh();
+
+            Thread.sleep(3000); // Show message before fading
+            // Fade-out effect: clear lines from bottom to top
+            for (int i = message.length - 1; i >= 0; i--) {
+                int msgLength = message[i].length();
+                int startCol = (totalWidth - msgLength) / 2;
+                tg.putString(startCol, startRow + i, " ".repeat(msgLength));
+                screen.refresh();
+                Thread.sleep(150); // slight delay for visual fade
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) { // double catch block for screen.refresh()
             Thread.currentThread().interrupt();
         }
     }

@@ -54,8 +54,8 @@ public class GameController {
      * initializes game state, and launches the first round.
      */
     public void startGame() {
+        gameView.welcomeMessage();
         String[] playerNames = gameView.getPlayerNames();
-
         Player player1 = new Player(playerNames[0]);
         Player player2 = new Player(playerNames[1]);
         List<Player> players = Arrays.asList(player1, player2);
