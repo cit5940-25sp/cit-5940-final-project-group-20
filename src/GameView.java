@@ -532,7 +532,7 @@ public class GameView {
         clearScreen();
 
         printString(6, 3, "╔══════════════════════════════════════════════════════════════╗");
-        printString(6, 4, "║       Hey there, welcome to Group 20's Movie Name Game!      ║");
+        printString(6, 4, "║                   Let the Battle begin!                      ║");
         printString(6, 5, "╚══════════════════════════════════════════════════════════════╝");
 
         printString(6, 7, "Please enter the names of the two players.");
