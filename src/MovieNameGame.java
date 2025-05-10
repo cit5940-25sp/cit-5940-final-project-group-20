@@ -21,42 +21,36 @@ public class MovieNameGame {
         GameView view = new GameView();
         try {
             boolean playAgain;
+            MovieDatabase movieDatabase = new MovieDatabase();
+            List<ConnectionStrategy> connectionStrategies = Arrays.asList(
+                    new ActorConnection(),
+                    new DirectorConnection(),
+                    new WriterConnection(),
+                    new ComposerConnection(),
+                    new CinematographerConnection(),
+                    new GenreConnection()
+            );
+
             do {
                 try {
-                    GameState gameState = new GameState();
-                    MovieDatabase movieDatabase = new MovieDatabase();
-                    List<ConnectionStrategy> connectionStrategies = Arrays.asList(
-                        new ActorConnection(),
-                        new DirectorConnection(),
-                        new WriterConnection(),
-                        new ComposerConnection(),
-                        new CinematographerConnection(),
-                        new GenreConnection()
-                    );
-
+                    GameState gameState = new GameState();  // New state each round
                     GameController gameController = new GameController(
-                            gameState, view, movieDatabase, connectionStrategies);
+                            gameState, view, movieDatabase, connectionStrategies
+                    );
 
                     gameController.startGame();
                 } catch (Exception e) {
-                    e.printStackTrace();  // if error
-                    break; // Exit the loop so we don't restart in a broken state
+                    e.printStackTrace();
+                    break;
                 }
 
                 playAgain = view.promptRestart();
-
-                // Displays thank you message
                 if (!playAgain) {
                     view.showThankYouMessage();
                 }
-
-                // TEST: FLUSH - not sure if we need it but I took it out
-                // while (view.pollInput() != null) {}
-
             } while (playAgain);
         } finally {
-            view.closeScreen();  // restoreing the terminal
+            view.closeScreen();
         }
     }
 }
-
