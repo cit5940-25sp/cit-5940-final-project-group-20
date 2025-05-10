@@ -2175,6 +2175,7 @@ Writer: null
 Cinematographer: null
 Composer: null
 Genres: [Fantasy, Action, Thriller]
+
 --------------------------------------------------
 Title: Animal House
 Release Year: 1978

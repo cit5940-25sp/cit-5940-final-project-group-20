@@ -273,6 +273,8 @@ public class GameController {
                 currentPlayer.addMovie(nextMovie);
 
                 if (currentPlayer.hasWon()) {
+                    // TEST STOPPING TIMER
+                    stopTimer();
                     gameState.setGameOver(true);
                     gameView.showWinner(currentPlayer);
                     return;
