@@ -74,4 +74,13 @@ public class WriterConnectionTest {
     public void testGetType() {
         assertEquals("Writer", connection.getType());
     }
+
+    @Test
+    public void testGetSharedElementReturnsWriterIfMatched() {
+        // Shared writer: "Soojin"
+        String shared = connection.getSharedElement(movie1, movie2);
+        assertEquals("Soojin", shared);
+    }
+
+
 }

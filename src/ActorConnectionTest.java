@@ -74,4 +74,28 @@ public class ActorConnectionTest {
     public void testGetType() {
         assertEquals("Actor", actorConnection.getType());
     }
+
+
+    @Test
+    public void testGetSharedElementWithCommonActor() {
+        // Actor 2 is common in movieA and movieB
+        String shared = actorConnection.getSharedElement(movieA, movieB);
+        assertEquals("Actor 2", shared);
+    }
+
+
+    @Test
+    public void testGetSharedElementWithNullActorList() {
+        Movie nullActorMovie = new Movie(
+                "NullActor", 2021,
+                null, "Dir", "Wr", "Cine", "Comp",
+                Arrays.asList("Genre")
+        );
+        assertNull(actorConnection.getSharedElement(movieA, nullActorMovie));
+        assertNull(actorConnection.getSharedElement(nullActorMovie, movieA));
+    }
+
+
 }
+
+

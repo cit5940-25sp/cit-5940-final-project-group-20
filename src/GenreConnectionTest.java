@@ -87,4 +87,12 @@ public class GenreConnectionTest {
     public void testGetType() {
         assertEquals("Genre", connection.getType());
     }
+
+    @Test
+    public void testGetSharedElementReturnsGenreIfMatched() {
+        // Shared genre: "Thriller"
+        String shared = connection.getSharedElement(movie1, movie2);
+        assertEquals("Thriller", shared);
+    }
+
 }

@@ -74,4 +74,12 @@ public class DirectorConnectionTest {
     public void testGetType() {
         assertEquals("Director", connection.getType());
     }
+
+    @Test
+    public void testGetSharedElementReturnsDirectorNameIfMatched() {
+        // Should return "Christopher Nolan" (caseinsensitive match)
+        String shared = connection.getSharedElement(movie1, movie2);
+        assertEquals("Christopher Nolan", shared);
+    }
+
 }
