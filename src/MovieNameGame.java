@@ -50,12 +50,9 @@ public class MovieNameGame {
                     view.showThankYouMessage();
                 }
 
-                // TEST: FLUSH - not sure if we need it but I took it out
-                // while (view.pollInput() != null) {}
-
             } while (playAgain);
         } finally {
-            view.closeScreen();  // restoreing the terminal
+            view.closeScreen();  // restoring the terminal
         }
     }
 }
