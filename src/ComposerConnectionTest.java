@@ -14,8 +14,10 @@ public class ComposerConnectionTest {
 
     @Before
     public void setUp() {
+        // makes new connection class type
         connection = new ComposerConnection();
 
+        // adds new movie classes for both movies
         movie1 = new Movie(
                 "Movie One", 2000,
                 Arrays.asList("Actor A"),

@@ -8,7 +8,6 @@ public interface ConnectionStrategy {
 
     /**
      * Determines whether two movies are connected according to this strategy.
-     * <p>
      * For example, two movies may be connected if they share the same director, actor, or genre.
      *
      * @param a the first movie
@@ -19,7 +18,6 @@ public interface ConnectionStrategy {
 
     /**
      * Returns a string describing the type of connection this strategy represents.
-     * <p>
      * For example, "Director", "Actor", or "Genre".
      *
      * @return the name of the connection type

@@ -4,7 +4,7 @@
  * of movies that share the given director's name.
  */
 public class DirectorWinCondition implements WinConditionStrategy {
-
+    // private field initialisation
     private String director;
     private int requiredCount;
 
@@ -31,11 +31,13 @@ public class DirectorWinCondition implements WinConditionStrategy {
     @Override
     public boolean isSatisfied(Player player) {
         int count = 0;
+        // keeps count of all movies user played and increments each time movie played with given director
         for (Movie movie : player.getMoviesPlayed()) {
             if (director.equalsIgnoreCase(movie.getDirector())) {   
                 count++;
             }
         }
+        // returns if target hit!
         return count >= requiredCount; // returns true if required count is reached!
     }
 

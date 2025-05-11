@@ -15,13 +15,14 @@ public class DirectorConnection implements ConnectionStrategy {
      */
     @Override
     public boolean areConnected(Movie a, Movie b) {
+        // extracts directors of boht movies
         String directorA = a.getDirector();
         String directorB = b.getDirector();
-
+        // makes sure director fields are actually valid
         if (directorA == null || directorB == null) {
             return false;
         }
-
+        // returns if connection is valid
         return directorA.equalsIgnoreCase(directorB);
     }
 
@@ -48,6 +49,7 @@ public class DirectorConnection implements ConnectionStrategy {
      */
     @Override
     public String getSharedElement(Movie a, Movie b) {
+        // check if connection is valid (< 3 times)
         String dirA = a.getDirector();
         String dirB = b.getDirector();
         return (dirA != null && dirB != null && dirA.equalsIgnoreCase(dirB)) ? dirA : null;

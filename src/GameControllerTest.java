@@ -1,9 +1,12 @@
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
+import java.util.*;
+
+
+
+// Doesnt use assertions but instead verification because we are not
+// asserting a state, but verifying interactions using mockito!!
 
 /**
  * Unit tests for the {@link GameController} class using JUnit and Mockito.
@@ -17,8 +20,6 @@ import com.googlecode.lanterna.input.KeyType;
  * We use Mockito to "mock" or fake the behavior of dependencies like GameView, GameState, MovieDatabase, etc.
  * Because they are dynamic and rely on the execution of these classes which means it would be hard to test otherwise.
  */
-import java.util.*;
-
 public class GameControllerTest {
     // Mocks for all the other classes GameController depends on
     private GameView gameView;
@@ -38,16 +39,16 @@ public class GameControllerTest {
      */
     @Before
     public void setUp() {
-        // Create mocks for all dependencies
+        // Creating mocks for all dependencies (Gameview, data base etc so we don't actually have to load)
         gameView = mock(GameView.class);
         gameState = mock(GameState.class);
         movieDatabase = mock(MovieDatabase.class);
         strategies = new ArrayList<>();
 
-        // Create mocks for all dependencies
+        // Creating mocks for all dependencies
         controller = new GameController(gameState, gameView, movieDatabase, strategies);
 
-        // Create mock players and movies for test data
+        // Creating mock players and movies for test data
         player1 = mock(Player.class);
         player2 = mock(Player.class);
 
@@ -67,11 +68,11 @@ public class GameControllerTest {
         when(movieDatabase.getValidStartingMovie(any())).thenReturn(startMovie);
         when(movieDatabase.getAllMovies()).thenReturn(Set.of(startMovie));
 
-        // Using real GameState to verify state setup
+        // Using actual real GameState to verify state setup
         GameController controller = new GameController(new GameState(), gameView, movieDatabase, strategies);
         controller.startGame();
 
-        // Verify calls were made (interaction-based testing)
+        // Verify calls were made
         verify(gameView).getPlayerNames();
         verify(movieDatabase).getValidStartingMovie(any());
     }
@@ -125,7 +126,7 @@ public class GameControllerTest {
         when(player1.hasWon()).thenReturn(true);
         when(gameState.canUseSpecificConnection(any(), any())).thenReturn(true);
 
-        // Create a mock connection strategy that says "Start" and "Next" are connected
+        // Creating mock connection strategy that says "Start" and "Next" are connected
         ConnectionStrategy strategy = mock(ConnectionStrategy.class);
         when(strategy.getType()).thenReturn("Genre");
         when(strategy.areConnected(any(), any())).thenReturn(true);
@@ -135,7 +136,7 @@ public class GameControllerTest {
         // Simulate the move
         callPrivateHandle(controller, "Next");
 
-        // Check that the winner was shown and the game ended
+        // Check that the winner was shown and the game ended.
         verify(gameView).showWinner(player1);
         verify(gameState).setGameOver(true);
     }

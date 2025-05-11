@@ -44,20 +44,13 @@ public class MovieNameGame {
                     break;
                 }
 
-                playAgain = view.promptRestart();
+                playAgain = view.promptRestart();   // prompts restart (starts loop from beginning)
                 if (!playAgain) {
-                    view.showThankYouMessage();
+                    view.showThankYouMessage(); // display thank you message if user doesnt want to play again
                 }
-<<<<<<< HEAD
-
             } while (playAgain);
         } finally {
-            view.closeScreen();  // restoring the terminal
-=======
-            } while (playAgain);
-        } finally {
-            view.closeScreen();
->>>>>>> 9343fcb7f57e8cb361013ebb32f89418ad217978
+            view.closeScreen(); // closese GUI
         }
     }
 }

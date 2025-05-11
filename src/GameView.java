@@ -613,7 +613,7 @@ public class GameView {
                 }
             } catch (NumberFormatException ignored) {}
 
-            printString(errorCol, choiceRow, "<-- Invalid! Enter 1, 2, or 3");             // ✅ ADDED: show error same row
+            printString(errorCol, choiceRow, "<-- Invalid! Enter 1, 2, or 3");
         }
 
         // Difficulty section

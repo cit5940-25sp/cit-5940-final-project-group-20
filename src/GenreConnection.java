@@ -46,7 +46,14 @@ public  class GenreConnection implements ConnectionStrategy {
         return "Genre";
     }
 
-
+    /**
+     * Returns the first shared genre between two movies!
+     * Used to keep count and make sure any given connection used only 3 times.
+     *
+     * @param a the first movie
+     * @param b the second movie
+     * @return a common genre string if found; otherwise {@code null}
+     */
     @Override
     public String getSharedElement(Movie a, Movie b) {
         List<String> genresA = a.getGenres();

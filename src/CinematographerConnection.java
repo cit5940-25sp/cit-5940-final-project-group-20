@@ -13,15 +13,18 @@ public class CinematographerConnection implements ConnectionStrategy {
      */
     @Override
     public boolean areConnected(Movie a, Movie b) {
+        // extracts cinamatographers from movie a and b
         String cinematographerA = a.getCinematographer();
         String cinematographerB = b.getCinematographer();
 
+        // makes sure cinamatographers have a valid field in databas
         if (cinematographerA == null || cinematographerB == null) {
             return false;
         }
-
+        // returns if connection is true or false!
         return cinematographerA.equals(cinematographerB);
     }
+
     /**
      * Returns the type of connection this strategy represents.
      *
@@ -32,9 +35,9 @@ public class CinematographerConnection implements ConnectionStrategy {
     }
 
 
-
     @Override
     public String getSharedElement(Movie a, Movie b) {
+        // extracts the connected cinematographer to check if connection valid (under 3 times)
         String ca = a.getCinematographer();
         String cb = b.getCinematographer();
         return (ca != null && cb != null && ca.equals(cb)) ? ca : null;

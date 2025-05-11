@@ -7,6 +7,7 @@
  */
 public class ActorWinCondition implements WinConditionStrategy {
 
+    // private attributes for ActorWinCondition
     private String actor;
     private int requiredCount;
 
