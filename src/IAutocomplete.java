@@ -2,52 +2,46 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author ericfouh
+ * Interface for autocomplete that is using a trie - reworked on the homework Autocomplete structure
+ * Includes methods for building the Trie, get the SubTrie(adding words), and retrieving suggestions
+ *
  */
 public interface IAutocomplete
 {
 
     /**
-     * Adds a new word with its associated weight to the Trie.
-     * If the word contains an invalid character, simply do nothing.
+     * Adds a word with the matching movie into the trie struct
      *
-     * @param word the word to be added to the Trie
-     * @param movie the movie that word belongs to
+     * @param word  the word that will be added to trie
+     * @param movie the movie connected to the word
      */
     public void addWord(String word, Movie movie);
 
 
-
     /**
-     * Initializes the Trie
+     * Builds tire from a collection of movies
      *
-     * @param movies Collection of movies - all the movies we want to be able to autocomplete for
-     * @return the root of the Trie You might find the readLine() method in
-     *         BufferedReader useful in this situation as it will allow you to
-     *         read a file one line at a time.
+     * @param movies a collection of movies that can be indexed to
+     * @return the root node of trie that was made
      */
     public Node buildTrie(Collection<Movie> movies);
 
 
     /**
-     * @param prefix
-     * @return the root of the subTrie corresponding to the last character of
-     *         the prefix. If the prefix is not represented in the trie, return null.
+     * Gets the SubTrie from a given prefix
+     *
+     * @param prefix the parameter, prefix, to search for in the Trie
+     * @return the node of the SubTrie or {@code null} if the prefix is not found
      */
     public Node getSubTrie(String prefix);
 
 
 
     /**
-     * This method should not throw an exception.
-     * Make sure that you preserve encapsulation by returning a list of copies of the
-     * original Terms; otherwise, the user might be able to change the structure of your
-     * Trie based on the values returned.
+     * Returns list of autocomplete suggestions for the input, the prefix
      *
-     * @param prefix
-     * @return a List containing all the ITerm objects with query starting with
-     *         prefix. Return an empty list if there are no ITerm object starting
-     *         with prefix.
+     * @param prefix the prefix to autocomplete
+     * @return a list of ITerm objects that start with the given prefix or empty list if no matches are found
      */
     public List<ITerm> getSuggestions(String prefix);
 

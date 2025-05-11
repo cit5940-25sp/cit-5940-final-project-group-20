@@ -596,27 +596,30 @@ public class GameView {
 
 
         int choiceRow = 10;
-        int winConditionChoice = choiceRow + 1;
+        int inputCol = 25;
+        int errorCol = 50;
+        int winConditionChoice = -1;
 
         while (true) {
-            printString(4, choiceRow, "Enter choice (1-3):                           ");
-            String choiceInput = getUserInput(25, choiceRow);
+            printString(4, choiceRow, "Enter choice (1-3):                          ");
+            printString(errorCol, choiceRow, " ".repeat(30));
+
+            String choiceInput = getUserInput(inputCol, choiceRow).trim();
             try {
-                winConditionChoice = Integer.parseInt(choiceInput);
-                if (winConditionChoice >= 1 && winConditionChoice <= 3) {
+                int choice = Integer.parseInt(choiceInput);
+                if (choice >= 1 && choice <= 3) {
+                    winConditionChoice = choice;
                     break;
                 }
             } catch (NumberFormatException ignored) {}
 
-            choiceRow += 2;
-            printString(4, choiceRow, "Invalid input! Please enter 1, 2, or 3.");
-            choiceRow += 2;
+            printString(errorCol, choiceRow, "<-- Invalid! Enter 1, 2, or 3");             // ✅ ADDED: show error same row
         }
 
-        int difficultyRow = choiceRow + 3;
-        String difficulty = "";
-
-        int difficultyChoice = 0;
+        // Difficulty section
+        int difficultyRow = 13;
+        inputCol = 25;
+        errorCol = 50;
 
         printString(4, difficultyRow, "Select difficulty level:");
         printString(6, difficultyRow + 1, "1. Easy");
@@ -624,68 +627,49 @@ public class GameView {
         printString(6, difficultyRow + 3, "3. Hard");
 
         int difficultyInputRow = difficultyRow + 5;
+        int difficultyChoice = -1;
 
         while (true) {
-            printString(4, difficultyInputRow, "Enter choice (1-3): ");
-            String choice = getUserInput(25, difficultyInputRow).trim();
+            printString(4, difficultyInputRow, "Enter choice (1-3):                          ");
+            printString(errorCol, difficultyInputRow, " ".repeat(30));
+
+            String choice = getUserInput(inputCol, difficultyInputRow).trim();
             try {
-                difficultyChoice = Integer.parseInt(choice);
-                if (difficultyChoice >= 1 && difficultyChoice <= 3) {
+                int d = Integer.parseInt(choice);
+                if (d >= 1 && d <= 3) {
+                    difficultyChoice = d;
                     break;
                 }
             } catch (NumberFormatException ignored) {}
 
-            difficultyInputRow += 2;
-            printString(4, difficultyInputRow, "Invalid input! Please enter 1, 2, or 3.");
-            difficultyInputRow += 2;
+            printString(errorCol, difficultyInputRow, "<-- Invalid! Enter 1, 2, or 3");
         }
 
-        int count;
-        switch (difficultyChoice) {
-            case 1:
-                count = 3;
-                break;
+        int count = switch (difficultyChoice) {
+            case 1 -> 3;
+            case 2 -> 5;
+            case 3 -> 7;
+            default -> 5;
+        };
 
-            case 2:
-                count = 5;
-                break;
-
-            case 3:
-                count = 7;
-                break;
-
-            default:
-                count = 5;
-        }
-
-        WinConditionStrategy winCondition;
-
-        switch (winConditionChoice) {
-            case 1: {
+        return switch (winConditionChoice) {
+            case 1 -> {
                 List<String> genres = new ArrayList<>(movieDatabase.getAllGenres());
                 String randomGenre = genres.get(ThreadLocalRandom.current().nextInt(genres.size()));
-                winCondition = new GenreWinCondition(randomGenre, count);
-                break;
+                yield new GenreWinCondition(randomGenre, count);
             }
-            case 2: {
+            case 2 -> {
                 List<String> actors = new ArrayList<>(movieDatabase.getAllActors());
                 String randomActor = actors.get(ThreadLocalRandom.current().nextInt(actors.size()));
-                winCondition = new ActorWinCondition(randomActor, count);
-                break;
+                yield new ActorWinCondition(randomActor, count);
             }
-            case 3: {
+            case 3 -> {
                 List<String> directors = new ArrayList<>(movieDatabase.getAllDirectors());
                 String randomDirector = directors.get(ThreadLocalRandom.current().nextInt(directors.size()));
-                winCondition = new DirectorWinCondition(randomDirector, count);
-                break;
+                yield new DirectorWinCondition(randomDirector, count);
             }
-            default: {
-                winCondition = new GenreWinCondition("Action", count);
-                break;
-            }
-        }
-
-        return winCondition;
+            default -> new GenreWinCondition("Action", count);
+        };
     }
 
     /**

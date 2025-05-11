@@ -21,39 +21,43 @@ public class MovieNameGame {
         GameView view = new GameView();
         try {
             boolean playAgain;
+            MovieDatabase movieDatabase = new MovieDatabase();
+            List<ConnectionStrategy> connectionStrategies = Arrays.asList(
+                    new ActorConnection(),
+                    new DirectorConnection(),
+                    new WriterConnection(),
+                    new ComposerConnection(),
+                    new CinematographerConnection(),
+                    new GenreConnection()
+            );
+
             do {
                 try {
-                    GameState gameState = new GameState();
-                    MovieDatabase movieDatabase = new MovieDatabase();
-                    List<ConnectionStrategy> connectionStrategies = Arrays.asList(
-                        new ActorConnection(),
-                        new DirectorConnection(),
-                        new WriterConnection(),
-                        new ComposerConnection(),
-                        new CinematographerConnection(),
-                        new GenreConnection()
-                    );
-
+                    GameState gameState = new GameState();  // New state each round
                     GameController gameController = new GameController(
-                            gameState, view, movieDatabase, connectionStrategies);
+                            gameState, view, movieDatabase, connectionStrategies
+                    );
 
                     gameController.startGame();
                 } catch (Exception e) {
-                    e.printStackTrace();  // if error
-                    break; // Exit the loop so we don't restart in a broken state
+                    e.printStackTrace();
+                    break;
                 }
 
                 playAgain = view.promptRestart();
-
-                // Displays thank you message
                 if (!playAgain) {
                     view.showThankYouMessage();
                 }
+<<<<<<< HEAD
 
             } while (playAgain);
         } finally {
             view.closeScreen();  // restoring the terminal
+=======
+            } while (playAgain);
+        } finally {
+            view.closeScreen();
+>>>>>>> 9343fcb7f57e8cb361013ebb32f89418ad217978
         }
     }
 }
-
